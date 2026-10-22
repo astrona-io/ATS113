@@ -1,0 +1,56 @@
+# Let The Inventory App And The CI Job Log In
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-113-lab-020-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-openbao"
+      description: "Helm 3.22.1 and the bao CLI 2.7.1, the CoreDNS rewrite, OpenBao v2.7.1 initialized and unsealed, the lab CA, a TLS listener and the client certificate, the inventory application"
+      type: "file"
+      source: "bootstrap/01-install-openbao.sh"
+    - name: "ats-113-lab-020-01-setup"
+      description: "Adds the policies inventory-app and ci-deploy and enables the kubernetes and approle auth methods without configuring them"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The tester pod and any application pods."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-openbao"
+      description: "Waits until OpenBao answers unsealed from the tester pod"
+      type: "file"
+      source: "testing/wait-for-openbao.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-kubernetes-login"
+      description: "Confirms inventory-app logs in with its ServiceAccount and gets inventory-app"
+      type: "file"
+      source: "validation/validate-kubernetes-login.sh"
+    - name: "validate-kubernetes-refused"
+      description: "Confirms a token of another ServiceAccount is refused by the role inventory"
+      type: "file"
+      source: "validation/validate-kubernetes-refused.sh"
+    - name: "validate-approle-login"
+      description: "Confirms the stored role_id and secret_id log in with ci-deploy and a TTL of at most 20 minutes"
+      type: "file"
+      source: "validation/validate-approle-login.sh"
+
+teardown:
+  keepCluster: false

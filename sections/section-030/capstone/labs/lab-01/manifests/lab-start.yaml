@@ -1,0 +1,28 @@
+# Client pods for this environment. OpenBao itself is installed by Helm in
+# the bootstrap script.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: clients
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tester
+  namespace: clients
+  labels:
+    app: tester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tester
+  template:
+    metadata:
+      labels:
+        app: tester
+    spec:
+      containers:
+        - name: tester
+          image: nicolaka/netshoot:v0.13
+          command: ["sh", "-c", "while true; do sleep 30; done"]

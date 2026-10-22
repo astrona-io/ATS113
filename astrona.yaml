@@ -1,0 +1,337 @@
+# Course manifest for ATS113 - Authentication Methods & Identity Management (OpenBao).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS113
+  title: "OpenBao: Authentication Methods & Identity Management"
+  maturity: draft
+  description: >
+    Training material covering the Authentication Methods & Identity
+    Management domain of the OpenBao training path: tokens, their TTLs,
+    renewal, types and roles; AppRole, Kubernetes and TLS certificate login
+    for machines; userpass and OpenID Connect login with Keycloak for people;
+    and the identity system that joins several logins into one entity with
+    groups. Each module pairs a layered reader with an ungraded hands-on
+    playground and a graded practice lab. Each section closes with an
+    integration capstone.
+    Written for OpenBao v2.7.1.
+
+  certification:
+    name: OpenBao
+    code: OPENBAO
+    provider: Astrona
+    domain: Authentication Methods & Identity Management
+    weight: 20
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Tokens And The Token Auth Method"
+    description: >
+      What a token carries, how its time to live, renewal and period work,
+      service and batch tokens, orphan tokens and token roles.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Work With OpenBao Tokens"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "What A Token Carries"
+        path: sections/section-010/module-01/course-01-what-a-token-carries.md
+      - type: reading
+        title: "TTLs, Renewal And Periodic Tokens"
+        path: sections/section-010/module-01/course-02-ttl-renewal-and-periodic-tokens.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Issue A Periodic Token For A Service Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: tokens
+        task_kind: build
+        tags: [token, periodic-token, orphan-token, token-ttl, policy]
+        learning_goals:
+          - Create an orphan periodic token with one policy for a service
+          - Store the token where the service reads it
+          - Prove the token renews back to its period and carries only the policy it needs
+        resources:
+          - name: "Tokens"
+            url: https://openbao.org/docs/concepts/tokens/
+          - name: "Token auth method API"
+            url: https://openbao.org/docs/api/auth/token/
+      - type: reading
+        title: "Service And Batch Tokens, Orphans And Token Roles"
+        path: sections/section-010/module-01/course-03-token-types-orphans-and-roles.md
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Token Role For A Reporting Service Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: tokens
+        task_kind: troubleshooting
+        tags: [token-role, periodic-token, orphan-token, token, accessor, policy]
+        learning_goals:
+          - Find what is wrong with a token role from its settings and the tokens it issues
+          - Fix the role so it can only issue orphan periodic tokens with the reporting policy
+          - Replace a leaked token by revoking it through its accessor and issuing a new one from the role
+        resources:
+          - name: "Tokens"
+            url: https://openbao.org/docs/concepts/tokens/
+          - name: "Token auth method API"
+            url: https://openbao.org/docs/api/auth/token/
+
+  - id: module-020
+    title: "Authentication For Machines"
+    description: >
+      AppRole for jobs and pipelines, Kubernetes auth for pods, and TLS
+      certificate auth, each mapped to a narrow policy.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Log Machines In Without Long-Lived Secrets"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "AppRole For Jobs And Pipelines"
+        path: sections/section-020/module-01/course-01-approle.md
+      - type: reading
+        title: "Kubernetes Auth For Pods"
+        path: sections/section-020/module-01/course-02-kubernetes-auth.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Let The Inventory App And The CI Job Log In Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: machine-auth
+        task_kind: build
+        tags: [kubernetes-auth, service-account, approle, secret-id, policy]
+        learning_goals:
+          - Configure Kubernetes auth so only one service account in one namespace gets the app policy
+          - Configure an AppRole for a CI job with short token and secret ID lifetimes
+          - Prove both logins work and a pod with another service account is refused
+        resources:
+          - name: "Kubernetes auth method"
+            url: https://openbao.org/docs/auth/kubernetes/
+          - name: "AppRole auth method"
+            url: https://openbao.org/docs/auth/approle/
+          - name: "Kubernetes auth method API"
+            url: https://openbao.org/docs/api/auth/kubernetes/
+      - type: reading
+        title: "TLS Certificate Auth"
+        path: sections/section-020/module-01/course-03-tls-certificate-auth.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair Three Machine Logins Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 35m
+        topic: machine-auth
+        task_kind: troubleshooting
+        tags: [kubernetes-auth, approle, cert-auth, tls, service-account, secret-id]
+        learning_goals:
+          - Find why a Kubernetes, an AppRole and a TLS certificate login are refused from the error each one returns
+          - Fix each role without widening it to every namespace, network or certificate
+          - Prove all three logins return tokens with their own policy
+        resources:
+          - name: "Kubernetes auth method"
+            url: https://openbao.org/docs/auth/kubernetes/
+          - name: "AppRole auth method API"
+            url: https://openbao.org/docs/api/auth/approle/
+          - name: "TLS certificates auth method"
+            url: https://openbao.org/docs/auth/cert/
+
+  - id: module-030
+    title: "Authentication For People"
+    description: >
+      Userpass accounts, OpenID Connect login with Keycloak from the browser
+      and the CLI, JWT roles with bound claims and groups, and login MFA.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Log People In With Userpass And Keycloak"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "Userpass Accounts"
+        path: sections/section-030/module-01/course-01-userpass.md
+      - type: reading
+        title: "OIDC Login With Keycloak"
+        path: sections/section-030/module-01/course-02-oidc-login-with-keycloak.md
+      - type: reading
+        title: "JWT Roles, Bound Claims And Login MFA"
+        path: sections/section-030/module-01/course-03-jwt-roles-and-claims.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Map A Keycloak Group To An OpenBao Policy Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: human-auth
+        task_kind: build
+        tags: [oidc, jwt, keycloak, groups-claim, bound-claims, policy]
+        learning_goals:
+          - Configure the JWT/OIDC auth method from Keycloak's discovery document
+          - Write a role that gives the ops policy only to members of the Keycloak group ops
+          - Prove that alice gets the ops policy and bob is refused
+        resources:
+          - name: "JWT/OIDC auth method"
+            url: https://openbao.org/docs/auth/jwt/
+          - name: "JWT/OIDC auth method API"
+            url: https://openbao.org/docs/api/auth/jwt/
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Broken Keycloak Login Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: human-auth
+        task_kind: troubleshooting
+        tags: [oidc, jwt, keycloak, groups-claim, bound-claims, userpass]
+        learning_goals:
+          - Find why OIDC and JWT logins fail from OpenBao's error messages and the claims in the token
+          - Fix the auth method configuration and the role without accepting every audience or group
+          - Prove that ops members log in with the ops policy and a break-glass userpass account still works
+        resources:
+          - name: "JWT/OIDC auth method"
+            url: https://openbao.org/docs/auth/jwt/
+          - name: "Userpass auth method"
+            url: https://openbao.org/docs/auth/userpass/
+
+  - id: module-040
+    title: "Identity: Entities, Aliases And Groups"
+    description: >
+      Entities and aliases that join several logins into one identity,
+      internal and external groups, and identity values in policy templates.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Join Logins Into One Identity"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "Entities And Aliases"
+        path: sections/section-040/module-01/course-01-entities-and-aliases.md
+      - type: reading
+        title: "Internal And External Groups"
+        path: sections/section-040/module-01/course-02-internal-and-external-groups.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Give Alice One Identity Across Two Logins Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: identity
+        task_kind: build
+        tags: [entity, entity-alias, internal-group, userpass, jwt, policy]
+        learning_goals:
+          - Create an entity with one alias on the userpass mount and one on the JWT mount
+          - Put the entity in an internal group that grants a shared policy
+          - Prove that both logins return the same entity ID and the group's policy
+        resources:
+          - name: "Identity"
+            url: https://openbao.org/docs/concepts/identity/
+          - name: "Identity entity API"
+            url: https://openbao.org/docs/api/secret/identity/entity/
+          - name: "Identity entity alias API"
+            url: https://openbao.org/docs/api/secret/identity/entity-alias/
+      - type: reading
+        title: "Identity In Policy Templates"
+        path: sections/section-040/module-01/course-03-identity-in-policies.md
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Make Groups From Keycloak Drive Access Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: identity
+        task_kind: troubleshooting
+        tags: [external-group, group-alias, entity, entity-alias, policy-template, keycloak]
+        learning_goals:
+          - Merge two entities that belong to the same person without losing either login
+          - Map the Keycloak group ops to an external group through a group alias on the right mount
+          - Prove with a templated policy that each person can write only their own secrets
+        resources:
+          - name: "Identity"
+            url: https://openbao.org/docs/concepts/identity/
+          - name: "Identity group alias API"
+            url: https://openbao.org/docs/api/secret/identity/group-alias/
+          - name: "Policies: templated policies"
+            url: https://openbao.org/docs/concepts/policies/

@@ -1,0 +1,56 @@
+# Repair A Token Role For A Reporting Service
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-113-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-openbao"
+      description: "Helm 3.22.1 and the bao CLI 2.7.1, the CoreDNS rewrite, OpenBao v2.7.1 initialized and unsealed"
+      type: "file"
+      source: "bootstrap/01-install-openbao.sh"
+    - name: "ats-113-capstone-010-setup"
+      description: "Creates the token role reporting with wrong settings and a leaked token issued from it"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The tester pod and any application pods."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-openbao"
+      description: "Waits until OpenBao answers unsealed from the tester pod"
+      type: "file"
+      source: "testing/wait-for-openbao.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-role-settings"
+      description: "Confirms the role allows only reporting, issues orphan periodic tokens and has no explicit max TTL"
+      type: "file"
+      source: "validation/validate-role-settings.sh"
+    - name: "validate-leaked-token-revoked"
+      description: "Confirms the leaked token no longer exists"
+      type: "file"
+      source: "validation/validate-leaked-token-revoked.sh"
+    - name: "validate-new-token"
+      description: "Confirms the stored token was issued from the role and is an orphan periodic token with reporting"
+      type: "file"
+      source: "validation/validate-new-token.sh"
+
+teardown:
+  keepCluster: false

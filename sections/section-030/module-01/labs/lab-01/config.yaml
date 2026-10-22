@@ -1,0 +1,56 @@
+# Map A Keycloak Group To An OpenBao Policy
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-113-lab-030-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-openbao"
+      description: "Helm 3.22.1 and the bao CLI 2.7.1, the CoreDNS rewrite, OpenBao v2.7.1 initialized and unsealed, Keycloak 26.8.1 with the realm inventory"
+      type: "file"
+      source: "bootstrap/01-install-openbao.sh"
+    - name: "ats-113-lab-030-01-setup"
+      description: "Adds the policies ops and dev and enables the oidc auth method without configuring it"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "The tester pod and any application pods."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-openbao"
+      description: "Waits until OpenBao answers unsealed from the tester pod"
+      type: "file"
+      source: "testing/wait-for-openbao.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-alice-gets-ops"
+      description: "Confirms alice's Keycloak ID token logs in with the role ops and returns the ops policy"
+      type: "file"
+      source: "validation/validate-alice-gets-ops.sh"
+    - name: "validate-bob-refused"
+      description: "Confirms bob, who is not in the group ops, is refused by the role ops"
+      type: "file"
+      source: "validation/validate-bob-refused.sh"
+    - name: "validate-role-bounds"
+      description: "Confirms the role checks the audience openbao and the group ops"
+      type: "file"
+      source: "validation/validate-role-bounds.sh"
+
+teardown:
+  keepCluster: false

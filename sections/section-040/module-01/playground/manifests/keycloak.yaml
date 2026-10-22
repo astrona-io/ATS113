@@ -1,0 +1,97 @@
+# Keycloak 26.8.1 in development mode: the OpenID Connect provider for
+# OpenBao. Bootstrap administrator admin/admin (lab-only).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keycloak
+---
+# Bootstrap administrator for the master realm. Lab-only credentials.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak-admin
+  namespace: keycloak
+type: Opaque
+stringData:
+  username: admin
+  password: admin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.8.1
+          args: ["start-dev"]
+          env:
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: username
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-admin
+                  key: password
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: management
+              containerPort: 9000
+          startupProbe:
+            httpGet:
+              path: /health/started
+              port: management
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: management
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: management
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 768Mi
+              cpu: 250m
+            limits:
+              memory: 1536Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: keycloak
+  labels:
+    app: keycloak
+spec:
+  selector:
+    app: keycloak
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+    - name: management
+      port: 9000
+      targetPort: management
