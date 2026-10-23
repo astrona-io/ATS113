@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 # PASS when: Confirms the stored token is an orphan periodic service token with inventory-read and no root.
 set -uo pipefail
+# grep -q stops reading at the first match; under pipefail the command
+# writing into the pipe then fails with SIGPIPE and a match looks like a
+# failure. This wrapper reads all input instead and keeps grep's exit status.
+grep() {
+  local arg quiet=0 args=()
+  for arg in "$@"; do
+    case "$arg" in
+      --quiet|--silent) quiet=1 ;;
+      --*) args+=("$arg") ;;
+      -*q*) quiet=1; [ "$arg" = "-q" ] || args+=("${arg//q/}") ;;
+      *) args+=("$arg") ;;
+    esac
+  done
+  if [ "$quiet" = 1 ]; then command grep "${args[@]}" >/dev/null; else command grep "$@"; fi
+}
 
 ROOT_TOKEN="$(kubectl -n openbao get secret openbao-init -o jsonpath='{.data.root-token}' | base64 -d)"
 # bao_root runs the bao CLI inside the OpenBao pod with the lab-only root token.
