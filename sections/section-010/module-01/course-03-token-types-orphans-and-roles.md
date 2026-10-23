@@ -61,7 +61,7 @@ bao write auth/token/roles/reporting \
 bao token create -role=reporting -policy=reporting
 ```
 
-The new token is an orphan with a 24-hour period and the policy `reporting`, and its lookup shows `role` as `reporting`. Now try to ask for more than the role allows:
+The new token is an orphan with a 24-hour period and the policy `reporting`, and its lookup shows `role` as `reporting` and a TTL of about 24 hours. Its `period` field stays empty: the token takes its period from the role, and OpenBao reads it from the role again at every renewal. Now try to ask for more than the role allows:
 
 ```sh
 bao token create -role=reporting -policy=inventory-read

@@ -49,7 +49,18 @@ TOKEN="$(kubectl -n clients get secret reporting-token -o jsonpath='{.data.token
 LOOKUP="$(bao_root token lookup -format=json "$TOKEN" 2>/dev/null)"
 [ -n "$LOOKUP" ] || fail "the token in reporting-token does not exist."
 [ "$(printf '%s' "$LOOKUP" | json_field '.data.role')" = "reporting" ] || fail "the token was not created through the role reporting."
-[ "$(printf '%s' "$LOOKUP" | json_field '.data.period')" = "86400" ] || fail "the token is not periodic with 24h."
+# A token that gets its period from a role shows no "period" in its lookup
+# (OpenBao 2.7.1 reads the period from the role at every renewal). Accept an
+# explicit 24h period, or a token of the role reporting whose role has a 24h
+# token_period, with no hard limit and a TTL above the seeded one hour.
+if [ "$(printf '%s' "$LOOKUP" | json_field '.data.period')" != "86400" ]; then
+  ROLE_PERIOD="$(bao_root read -format=json auth/token/roles/reporting 2>/dev/null | json_field '.data.token_period')"
+  TOKEN_TTL="$(printf '%s' "$LOOKUP" | json_field '.data.ttl')"
+  [ "$ROLE_PERIOD" = "86400" ] \
+    && [ "$(printf '%s' "$LOOKUP" | json_field '.data.explicit_max_ttl')" = "0" ] \
+    && [ "${TOKEN_TTL:-0}" -gt 3600 ] 2>/dev/null \
+    || fail "the token is not periodic with 24h."
+fi
 [ "$(printf '%s' "$LOOKUP" | json_field '.data.orphan')" = "true" ] || fail "the token is not an orphan."
 printf '%s' "$LOOKUP" | json_field '.data.policies[]' | grep -qxE 'admin|root' && fail "the token has admin or root."
 CODE="$(in_tester curl -s -o /dev/null -w '%{http_code}' -H "X-Vault-Token: $TOKEN" http://openbao.localtest.me:8200/v1/secret/data/reports/q3)"
