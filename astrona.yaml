@@ -29,8 +29,6 @@ training:
     name: OpenBao
     code: OPENBAO
     provider: Astrona
-    domain: Authentication Methods & Identity Management
-    weight: 20
 
 modules:
 
