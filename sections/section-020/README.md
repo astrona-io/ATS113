@@ -9,6 +9,7 @@ A job, a pod or a scheduled script cannot type a password, and a long-lived toke
 - How OpenBao checks a Kubernetes token with the TokenReview API, and why it needs `system:auth-delegator`.
 - TLS certificate auth: trusting a certificate authority and checking the client certificate's common name.
 - How to read the error of a refused machine login.
+- Running AppRole in production: role settings, pull and push secret IDs, wrapped delivery, and revoking by accessor.
 
 ## The learning path
 
@@ -20,6 +21,16 @@ The module starts at its landing page, which also launches the playground. The p
 2. Kubernetes Auth For Pods, followed by the lab **Let The Inventory App And The CI Job Log In**
 3. TLS Certificate Auth
 4. Summary
+
+### 2. Run AppRole In Production
+
+The playground for this module holds OpenBao with the AppRole method enabled, a KV engine and a `tester` pod.
+
+1. Role Settings And The Role ID
+2. Pull And Push Secret IDs
+3. Deliver A Secret ID Wrapped, followed by the lab **Provision A Wrapped Secret ID**
+4. Manage And Revoke Secret IDs
+5. Summary
 
 ## Section capstone: Repair Three Machine Logins
 

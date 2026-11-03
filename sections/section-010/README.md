@@ -9,6 +9,8 @@ Every request to OpenBao carries a token, and every login, whatever the auth met
 - Periodic tokens for long-running services that renew themselves.
 - Service and batch tokens, the token tree, and orphan tokens that survive their parent.
 - Token roles, which fix the settings of the tokens a service may create.
+- Enabling, listing, tuning and disabling auth methods, and the `token_*` settings every method shares.
+- The cubbyhole and response wrapping, to hand a secret to one receiver that can open it only once.
 
 ## The learning path
 
@@ -20,6 +22,26 @@ The module starts at its landing page, which also launches the playground. The p
 2. TTLs, Renewal And Periodic Tokens, followed by the lab **Issue A Periodic Token For A Service**
 3. Service And Batch Tokens, Orphans And Token Roles
 4. Summary
+
+### 2. Manage Authentication Methods
+
+The playground for this module holds OpenBao with a KV engine and the policies `inventory-read` and `reporting`.
+
+1. Enable, List And Disable Auth Methods
+2. Tune An Auth Method
+3. Token Settings On Logins, followed by the lab **Set Up A Tuned Staff Login**
+4. Log In From The CLI And Delegate Administration
+5. Summary
+
+### 3. Response Wrapping And The Cubbyhole
+
+The playground for this module holds OpenBao with a KV engine, example secrets and a `tester` pod.
+
+1. The Cubbyhole
+2. Wrap And Unwrap A Response
+3. Lookup, Rewrap And Wrap Your Own Data, followed by the lab **Deliver A Secret With A Wrapping Token**
+4. Safe Delivery With Wrapped Responses
+5. Summary
 
 ## Section capstone: Repair A Token Role For A Reporting Service
 

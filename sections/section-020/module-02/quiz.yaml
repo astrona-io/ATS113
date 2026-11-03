@@ -1,0 +1,282 @@
+# Knowledge check for one module. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats113-020-02
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: module
+  id: section-020-module-02
+  title: Run AppRole In Production
+placement:
+  position: after
+  reading: sections/section-020/module-02/course-05-summary.md
+questions:
+- id: ats113-020-02-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Treat the role ID
+  source_readings:
+  - sections/section-020/module-02/course-01-role-settings-and-role-id.md
+  prompt: How secret is an AppRole `role_id`?
+  options:
+  - id: a
+    text: It is not secret; the `secret_id` is the secret part.
+    explanation: Correct. The `role_id` identifies the role. The login needs the `secret_id`
+      as well when `bind_secret_id` is on.
+  - id: b
+    text: It is as secret as a root token.
+    explanation: Not correct. The `role_id` identifies the role. The login needs the
+      `secret_id` as well when `bind_secret_id` is on.
+  - id: c
+    text: It is secret only on Kubernetes.
+    explanation: Not correct. The `role_id` identifies the role. The login needs the
+      `secret_id` as well when `bind_secret_id` is on.
+  - id: d
+    text: It is a one-time password.
+    explanation: Not correct. The `role_id` identifies the role. The login needs the
+      `secret_id` as well when `bind_secret_id` is on.
+  correct_option: a
+  explanation: Correct. The `role_id` identifies the role. The login needs the `secret_id`
+    as well when `bind_secret_id` is on.
+- id: ats113-020-02-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Keep bind_secret_id on
+  source_readings:
+  - sections/section-020/module-02/course-01-role-settings-and-role-id.md
+  prompt: What happens if you turn off `bind_secret_id`?
+  options:
+  - id: a
+    text: Anyone who knows the `role_id` can log in, unless another binding limits
+      it.
+    explanation: Correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  - id: b
+    text: Logins need two secret IDs.
+    explanation: Not correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  - id: c
+    text: The role cannot issue tokens.
+    explanation: Not correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  - id: d
+    text: The `role_id` changes at every login.
+    explanation: Not correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  correct_option: a
+  explanation: Correct. Without the `secret_id`, the `role_id` alone is enough, so
+    the secret part is gone.
+- id: ats113-020-02-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Set a role ID
+  source_readings:
+  - sections/section-020/module-02/course-01-role-settings-and-role-id.md
+  prompt: Why would you write the `role_id` of a role yourself?
+  options:
+  - id: a
+    text: So the job's configuration can exist before the role.
+    explanation: Correct. A chosen `role_id` can be stored in configuration first.
+  - id: b
+    text: To make the role immune to revocation.
+    explanation: Not correct. A chosen `role_id` can be stored in configuration first.
+  - id: c
+    text: To skip the policy check.
+    explanation: Not correct. A chosen `role_id` can be stored in configuration first.
+  - id: d
+    text: To remove the secret ID TTL.
+    explanation: Not correct. A chosen `role_id` can be stored in configuration first.
+  correct_option: a
+  explanation: Correct. A chosen `role_id` can be stored in configuration first.
+- id: ats113-020-02-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the default mode
+  source_readings:
+  - sections/section-020/module-02/course-02-pull-and-push-secret-ids.md
+  prompt: In which mode does OpenBao generate the `secret_id`?
+  options:
+  - id: a
+    text: Pull mode.
+    explanation: Correct. Pull mode generates the value and returns it once with its
+      accessor.
+  - id: b
+    text: Push mode.
+    explanation: Not correct. Pull mode generates the value and returns it once with
+      its accessor.
+  - id: c
+    text: Wrap mode.
+    explanation: Not correct. Pull mode generates the value and returns it once with
+      its accessor.
+  - id: d
+    text: Bind mode.
+    explanation: Not correct. Pull mode generates the value and returns it once with
+      its accessor.
+  correct_option: a
+  explanation: Correct. Pull mode generates the value and returns it once with its
+    accessor.
+- id: ats113-020-02-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know why pull is preferred
+  source_readings:
+  - sections/section-020/module-02/course-02-pull-and-push-secret-ids.md
+  prompt: Why is pull mode preferred over push mode?
+  options:
+  - id: a
+    text: A pushed value is only as strong as the system that made it.
+    explanation: Correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  - id: b
+    text: Pull mode uses no accessor.
+    explanation: Not correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  - id: c
+    text: Push mode cannot expire.
+    explanation: Not correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  - id: d
+    text: Pull mode skips the audit log.
+    explanation: Not correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  correct_option: a
+  explanation: Correct. OpenBao generates a strong random value, while a pushed value
+    depends on its source.
+- id: ats113-020-02-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Narrow one secret ID
+  source_readings:
+  - sections/section-020/module-02/course-02-pull-and-push-secret-ids.md
+  prompt: Which value can you set on a single `secret_id` request to narrow it?
+  options:
+  - id: a
+    text: "`ttl`, `num_uses`, `cidr_list` and `metadata`."
+    explanation: Correct. The creation request can narrow the secret ID itself, within
+      the role limits.
+  - id: b
+    text: "`policies` and `token_type`."
+    explanation: Not correct. The creation request can narrow the secret ID itself,
+      within the role limits.
+  - id: c
+    text: "`role_id` and `accessor`."
+    explanation: Not correct. The creation request can narrow the secret ID itself,
+      within the role limits.
+  - id: d
+    text: "`wrap_ttl` only."
+    explanation: Not correct. The creation request can narrow the secret ID itself,
+      within the role limits.
+  correct_option: a
+  explanation: Correct. The creation request can narrow the secret ID itself, within
+    the role limits.
+- id: ats113-020-02-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Wrap a secret ID
+  source_readings:
+  - sections/section-020/module-02/course-03-deliver-a-secret-id-wrapped.md
+  prompt: What does the job receive when the orchestrator wraps the `secret_id`?
+  options:
+  - id: a
+    text: A wrapping token that it unwraps once.
+    explanation: Correct. Only the job unwraps the wrapping token, so the orchestrator
+      never sees the `secret_id`.
+  - id: b
+    text: The `secret_id` in clear text.
+    explanation: Not correct. Only the job unwraps the wrapping token, so the orchestrator
+      never sees the `secret_id`.
+  - id: c
+    text: The `role_id` only.
+    explanation: Not correct. Only the job unwraps the wrapping token, so the orchestrator
+      never sees the `secret_id`.
+  - id: d
+    text: A renewal token.
+    explanation: Not correct. Only the job unwraps the wrapping token, so the orchestrator
+      never sees the `secret_id`.
+  correct_option: a
+  explanation: Correct. Only the job unwraps the wrapping token, so the orchestrator
+    never sees the `secret_id`.
+- id: ats113-020-02-q08
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Write the orchestrator policy
+  source_readings:
+  - sections/section-020/module-02/course-03-deliver-a-secret-id-wrapped.md
+  prompt: Which rights does the orchestrator policy need?
+  options:
+  - id: a
+    text: Read on the role's `role-id` path and update on its `secret-id` path.
+    explanation: Correct. The orchestrator needs only to read one role ID and to create
+      secret IDs for that role.
+  - id: b
+    text: Read on `sys/policies/acl/*`.
+    explanation: Not correct. The orchestrator needs only to read one role ID and
+      to create secret IDs for that role.
+  - id: c
+    text: Update on `auth/approle/role/*`.
+    explanation: Not correct. The orchestrator needs only to read one role ID and
+      to create secret IDs for that role.
+  - id: d
+    text: Root on `auth/approle/`.
+    explanation: Not correct. The orchestrator needs only to read one role ID and
+      to create secret IDs for that role.
+  correct_option: a
+  explanation: Correct. The orchestrator needs only to read one role ID and to create
+    secret IDs for that role.
+- id: ats113-020-02-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Manage secret IDs by accessor
+  source_readings:
+  - sections/section-020/module-02/course-04-manage-and-revoke-secret-ids.md
+  prompt: How do you end a `secret_id` without knowing its value?
+  options:
+  - id: a
+    text: Destroy it by its accessor.
+    explanation: Correct. The secret-id-accessor endpoints list, look up and destroy
+      a secret ID.
+  - id: b
+    text: Delete the `role_id`.
+    explanation: Not correct. The secret-id-accessor endpoints list, look up and destroy
+      a secret ID.
+  - id: c
+    text: Disable the auth method.
+    explanation: Not correct. The secret-id-accessor endpoints list, look up and destroy
+      a secret ID.
+  - id: d
+    text: Wait for the token TTL.
+    explanation: Not correct. The secret-id-accessor endpoints list, look up and destroy
+      a secret ID.
+  correct_option: a
+  explanation: Correct. The secret-id-accessor endpoints list, look up and destroy
+    a secret ID.
+- id: ats113-020-02-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Revoke after theft
+  source_readings:
+  - sections/section-020/module-02/course-04-manage-and-revoke-secret-ids.md
+  prompt: A `secret_id` was stolen and already used. What else must you do after destroying
+    it?
+  options:
+  - id: a
+    text: Revoke the tokens that were issued with it.
+    explanation: Correct. Issued tokens stay valid until their TTL, so they need a
+      revocation.
+  - id: b
+    text: Nothing; tokens end with the secret ID.
+    explanation: Not correct. Issued tokens stay valid until their TTL, so they need
+      a revocation.
+  - id: c
+    text: Change the `role_id` only.
+    explanation: Not correct. Issued tokens stay valid until their TTL, so they need
+      a revocation.
+  - id: d
+    text: Restart OpenBao.
+    explanation: Not correct. Issued tokens stay valid until their TTL, so they need
+      a revocation.
+  correct_option: a
+  explanation: Correct. Issued tokens stay valid until their TTL, so they need a revocation.

@@ -1,0 +1,90 @@
+# Client pods for this environment. OpenBao itself is installed by Helm in
+# the bootstrap script.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: clients
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tester
+  namespace: clients
+  labels:
+    app: tester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tester
+  template:
+    metadata:
+      labels:
+        app: tester
+    spec:
+      containers:
+        - name: tester
+          image: nicolaka/netshoot:v0.13
+          command: ["sh", "-c", "while true; do sleep 30; done"]
+---
+# OpenLDAP for the LDAP auth method. Lab-only credentials.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ldap
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openldap
+  namespace: ldap
+  labels:
+    app: openldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openldap
+  template:
+    metadata:
+      labels:
+        app: openldap
+    spec:
+      containers:
+        - name: openldap
+          image: osixia/openldap:1.5.0
+          env:
+            - name: LDAP_ORGANISATION
+              value: Example
+            - name: LDAP_DOMAIN
+              value: example.org
+            - name: LDAP_ADMIN_PASSWORD
+              value: admin-password
+            - name: LDAP_READONLY_USER
+              value: "true"
+            - name: LDAP_READONLY_USER_USERNAME
+              value: readonly
+            - name: LDAP_READONLY_USER_PASSWORD
+              value: readonly-password
+            - name: LDAP_TLS
+              value: "false"
+          ports:
+            - containerPort: 389
+          readinessProbe:
+            tcpSocket:
+              port: 389
+            initialDelaySeconds: 10
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openldap
+  namespace: ldap
+spec:
+  selector:
+    app: openldap
+  ports:
+    - name: ldap
+      port: 389
+      targetPort: 389

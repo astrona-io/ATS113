@@ -1,0 +1,282 @@
+# Knowledge check for one module. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats113-010-03
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: module
+  id: section-010-module-03
+  title: Response Wrapping And The Cubbyhole
+placement:
+  position: after
+  reading: sections/section-010/module-03/course-05-summary.md
+questions:
+- id: ats113-010-03-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the cubbyhole
+  source_readings:
+  - sections/section-010/module-03/course-01-the-cubbyhole.md
+  prompt: Who can read a token's cubbyhole?
+  options:
+  - id: a
+    text: Only that token.
+    explanation: Correct. The cubbyhole is private to the token. Not even the root
+      token can read it.
+  - id: b
+    text: Any token with the `default` policy.
+    explanation: Not correct. The cubbyhole is private to the token. Not even the
+      root token can read it.
+  - id: c
+    text: Only the root token.
+    explanation: Not correct. The cubbyhole is private to the token. Not even the
+      root token can read it.
+  - id: d
+    text: Every token of the same entity.
+    explanation: Not correct. The cubbyhole is private to the token. Not even the
+      root token can read it.
+  correct_option: a
+  explanation: Correct. The cubbyhole is private to the token. Not even the root token
+    can read it.
+- id: ats113-010-03-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe cubbyhole lifetime
+  source_readings:
+  - sections/section-010/module-03/course-01-the-cubbyhole.md
+  prompt: What happens to a cubbyhole when its token expires?
+  options:
+  - id: a
+    text: The cubbyhole is deleted with it.
+    explanation: Correct. The cubbyhole lives and dies with its token.
+  - id: b
+    text: The cubbyhole is copied to the parent token.
+    explanation: Not correct. The cubbyhole lives and dies with its token.
+  - id: c
+    text: The cubbyhole stays until it is deleted by hand.
+    explanation: Not correct. The cubbyhole lives and dies with its token.
+  - id: d
+    text: The cubbyhole becomes readable by the root token.
+    explanation: Not correct. The cubbyhole lives and dies with its token.
+  correct_option: a
+  explanation: Correct. The cubbyhole lives and dies with its token.
+- id: ats113-010-03-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Request wrapping
+  source_readings:
+  - sections/section-010/module-03/course-02-wrap-and-unwrap.md
+  prompt: Which flag asks the CLI to wrap a response?
+  options:
+  - id: a
+    text: "`-wrap-ttl`."
+    explanation: Correct. `-wrap-ttl` stores the response in the cubbyhole of a new
+      wrapping token.
+  - id: b
+    text: "`-seal`."
+    explanation: Not correct. `-wrap-ttl` stores the response in the cubbyhole of
+      a new wrapping token.
+  - id: c
+    text: "`-hide`."
+    explanation: Not correct. `-wrap-ttl` stores the response in the cubbyhole of
+      a new wrapping token.
+  - id: d
+    text: "`-orphan`."
+    explanation: Not correct. `-wrap-ttl` stores the response in the cubbyhole of
+      a new wrapping token.
+  correct_option: a
+  explanation: Correct. `-wrap-ttl` stores the response in the cubbyhole of a new
+    wrapping token.
+- id: ats113-010-03-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the single use
+  source_readings:
+  - sections/section-010/module-03/course-02-wrap-and-unwrap.md
+  prompt: A wrapping token has been unwrapped once. What does a second unwrap return?
+  options:
+  - id: a
+    text: An error, because the token is used up.
+    explanation: Correct. A wrapping token works exactly once, so a second use shows
+      that someone else already opened it.
+  - id: b
+    text: The same data again.
+    explanation: Not correct. A wrapping token works exactly once, so a second use
+      shows that someone else already opened it.
+  - id: c
+    text: Empty data.
+    explanation: Not correct. A wrapping token works exactly once, so a second use
+      shows that someone else already opened it.
+  - id: d
+    text: A new wrapping token.
+    explanation: Not correct. A wrapping token works exactly once, so a second use
+      shows that someone else already opened it.
+  correct_option: a
+  explanation: Correct. A wrapping token works exactly once, so a second use shows
+    that someone else already opened it.
+- id: ats113-010-03-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the signal of a failed unwrap
+  source_readings:
+  - sections/section-010/module-03/course-04-safe-delivery.md
+  prompt: A receiver gets an error unwrapping a token it has never used. What is the
+    safest conclusion?
+  options:
+  - id: a
+    text: The secret may be exposed and must be replaced.
+    explanation: Correct. An unwrap that fails when you did not unwrap before means
+      someone else did, or the TTL ended.
+  - id: b
+    text: The network is slow.
+    explanation: Not correct. An unwrap that fails when you did not unwrap before
+      means someone else did, or the TTL ended.
+  - id: c
+    text: The token needs a longer TTL.
+    explanation: Not correct. An unwrap that fails when you did not unwrap before
+      means someone else did, or the TTL ended.
+  - id: d
+    text: The receiver must retry until it works.
+    explanation: Not correct. An unwrap that fails when you did not unwrap before
+      means someone else did, or the TTL ended.
+  correct_option: a
+  explanation: Correct. An unwrap that fails when you did not unwrap before means
+    someone else did, or the TTL ended.
+- id: ats113-010-03-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Look up without using up
+  source_readings:
+  - sections/section-010/module-03/course-03-lookup-rewrap-and-wrap-data.md
+  prompt: Which operation checks a wrapping token without using it up?
+  options:
+  - id: a
+    text: "`sys/wrapping/lookup`."
+    explanation: Correct. Lookup shows the creation path, creation time and TTL and
+      leaves the token valid.
+  - id: b
+    text: "`sys/wrapping/unwrap`."
+    explanation: Not correct. Lookup shows the creation path, creation time and TTL
+      and leaves the token valid.
+  - id: c
+    text: "`sys/wrapping/rewrap`."
+    explanation: Not correct. Lookup shows the creation path, creation time and TTL
+      and leaves the token valid.
+  - id: d
+    text: "`auth/token/revoke`."
+    explanation: Not correct. Lookup shows the creation path, creation time and TTL
+      and leaves the token valid.
+  correct_option: a
+  explanation: Correct. Lookup shows the creation path, creation time and TTL and
+    leaves the token valid.
+- id: ats113-010-03-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use rewrap
+  source_readings:
+  - sections/section-010/module-03/course-03-lookup-rewrap-and-wrap-data.md
+  prompt: What does `sys/wrapping/rewrap` do?
+  options:
+  - id: a
+    text: Moves the data into a new wrapping token with a new TTL and invalidates
+      the old one.
+    explanation: Correct. Rewrap gives a fresh TTL without anyone reading the content.
+  - id: b
+    text: Unwraps the data and prints it.
+    explanation: Not correct. Rewrap gives a fresh TTL without anyone reading the
+      content.
+  - id: c
+    text: Extends the TTL of the same token.
+    explanation: Not correct. Rewrap gives a fresh TTL without anyone reading the
+      content.
+  - id: d
+    text: Copies the data to a second token and keeps both.
+    explanation: Not correct. Rewrap gives a fresh TTL without anyone reading the
+      content.
+  correct_option: a
+  explanation: Correct. Rewrap gives a fresh TTL without anyone reading the content.
+- id: ats113-010-03-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Wrap your own data
+  source_readings:
+  - sections/section-010/module-03/course-03-lookup-rewrap-and-wrap-data.md
+  prompt: Which endpoint creates a wrapping token for data that you supply?
+  options:
+  - id: a
+    text: "`sys/wrapping/wrap`."
+    explanation: Correct. The wrap endpoint stores the data you send in a new wrapping
+      token.
+  - id: b
+    text: "`sys/wrapping/lookup`."
+    explanation: Not correct. The wrap endpoint stores the data you send in a new
+      wrapping token.
+  - id: c
+    text: "`cubbyhole/wrap`."
+    explanation: Not correct. The wrap endpoint stores the data you send in a new
+      wrapping token.
+  - id: d
+    text: "`sys/mounts/wrap`."
+    explanation: Not correct. The wrap endpoint stores the data you send in a new
+      wrapping token.
+  correct_option: a
+  explanation: Correct. The wrap endpoint stores the data you send in a new wrapping
+    token.
+- id: ats113-010-03-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Check the creation path
+  source_readings:
+  - sections/section-010/module-03/course-04-safe-delivery.md
+  prompt: Why does the receiver compare the creation path from a lookup with the one
+    it expects?
+  options:
+  - id: a
+    text: To confirm the token wraps the expected kind of response.
+    explanation: Correct. A wrapping token for another path may be a swapped or forged
+      one, so the receiver checks before unwrapping.
+  - id: b
+    text: To renew the token.
+    explanation: Not correct. A wrapping token for another path may be a swapped or
+      forged one, so the receiver checks before unwrapping.
+  - id: c
+    text: To find the policies of the sender.
+    explanation: Not correct. A wrapping token for another path may be a swapped or
+      forged one, so the receiver checks before unwrapping.
+  - id: d
+    text: To disable the cubbyhole.
+    explanation: Not correct. A wrapping token for another path may be a swapped or
+      forged one, so the receiver checks before unwrapping.
+  correct_option: a
+  explanation: Correct. A wrapping token for another path may be a swapped or forged
+    one, so the receiver checks before unwrapping.
+- id: ats113-010-03-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Wrap a new token
+  source_readings:
+  - sections/section-010/module-03/course-04-safe-delivery.md
+  prompt: Why wrap a new token when you create it for a service?
+  options:
+  - id: a
+    text: Even the orchestrator that creates it never reads it.
+    explanation: Correct. The wrapping token carries the response, so only the receiver
+      unwraps the real token.
+  - id: b
+    text: The token gets a longer TTL.
+    explanation: Not correct. The wrapping token carries the response, so only the
+      receiver unwraps the real token.
+  - id: c
+    text: The token loses its policies.
+    explanation: Not correct. The wrapping token carries the response, so only the
+      receiver unwraps the real token.
+  - id: d
+    text: The token can be used many times.
+    explanation: Not correct. The wrapping token carries the response, so only the
+      receiver unwraps the real token.
+  correct_option: a
+  explanation: Correct. The wrapping token carries the response, so only the receiver
+    unwraps the real token.

@@ -1,0 +1,282 @@
+# Knowledge check for one module. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats113-010-02
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: module
+  id: section-010-module-02
+  title: Manage Authentication Methods
+placement:
+  position: after
+  reading: sections/section-010/module-02/course-05-summary.md
+questions:
+- id: ats113-010-02-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name where auth methods are mounted
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: Where does an auth method enabled with `bao auth enable ldap` live?
+  options:
+  - id: a
+    text: At `auth/ldap/`.
+    explanation: Correct. Auth methods are mounted below `auth/`, and the path defaults
+      to the method name.
+  - id: b
+    text: At `sys/ldap/`.
+    explanation: Not correct. Auth methods are mounted below `auth/`, and the path
+      defaults to the method name.
+  - id: c
+    text: At `secret/ldap/`.
+    explanation: Not correct. Auth methods are mounted below `auth/`, and the path
+      defaults to the method name.
+  - id: d
+    text: At `identity/ldap/`.
+    explanation: Not correct. Auth methods are mounted below `auth/`, and the path
+      defaults to the method name.
+  correct_option: a
+  explanation: Correct. Auth methods are mounted below `auth/`, and the path defaults
+    to the method name.
+- id: ats113-010-02-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Mount one method twice
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: What must you add to `bao auth enable` to mount a second userpass method?
+  options:
+  - id: a
+    text: "`-path=<new path>`."
+    explanation: Correct. The `-path` option mounts the same method at a second path,
+      and each mount has its own users and accessor.
+  - id: b
+    text: "`-force`."
+    explanation: Not correct. The `-path` option mounts the same method at a second
+      path, and each mount has its own users and accessor.
+  - id: c
+    text: "`-namespace=<name>`."
+    explanation: Not correct. The `-path` option mounts the same method at a second
+      path, and each mount has its own users and accessor.
+  - id: d
+    text: Nothing; a method can only be mounted once.
+    explanation: Not correct. The `-path` option mounts the same method at a second
+      path, and each mount has its own users and accessor.
+  correct_option: a
+  explanation: Correct. The `-path` option mounts the same method at a second path,
+    and each mount has its own users and accessor.
+- id: ats113-010-02-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain what disabling does
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: What happens to tokens when you disable an auth method mount?
+  options:
+  - id: a
+    text: They are revoked together with the mount configuration.
+    explanation: Correct. Disabling deletes the configuration and users and revokes
+      every token the mount issued.
+  - id: b
+    text: They stay valid until their TTL ends.
+    explanation: Not correct. Disabling deletes the configuration and users and revokes
+      every token the mount issued.
+  - id: c
+    text: They are moved to the `token` method.
+    explanation: Not correct. Disabling deletes the configuration and users and revokes
+      every token the mount issued.
+  - id: d
+    text: They lose their policies but stay valid.
+    explanation: Not correct. Disabling deletes the configuration and users and revokes
+      every token the mount issued.
+  correct_option: a
+  explanation: Correct. Disabling deletes the configuration and users and revokes
+    every token the mount issued.
+- id: ats113-010-02-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know which method cannot be disabled
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: Which auth method cannot be disabled?
+  options:
+  - id: a
+    text: "`token`."
+    explanation: Correct. The built-in `token` method is always mounted and cannot
+      be disabled.
+  - id: b
+    text: "`userpass`."
+    explanation: Not correct. The built-in `token` method is always mounted and cannot
+      be disabled.
+  - id: c
+    text: "`approle`."
+    explanation: Not correct. The built-in `token` method is always mounted and cannot
+      be disabled.
+  - id: d
+    text: "`ldap`."
+    explanation: Not correct. The built-in `token` method is always mounted and cannot
+      be disabled.
+  correct_option: a
+  explanation: Correct. The built-in `token` method is always mounted and cannot be
+    disabled.
+- id: ats113-010-02-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify mounts by accessor
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: Why is the mount accessor the safest way to tell two mounts apart?
+  options:
+  - id: a
+    text: It is a unique ID that audit logs and the identity system use.
+    explanation: Correct. The accessor is unique to the mount, while the path can
+      be reused after a disable.
+  - id: b
+    text: It is the same for every mount of one method.
+    explanation: Not correct. The accessor is unique to the mount, while the path
+      can be reused after a disable.
+  - id: c
+    text: It is the secret key of the mount.
+    explanation: Not correct. The accessor is unique to the mount, while the path
+      can be reused after a disable.
+  - id: d
+    text: It changes at every login.
+    explanation: Not correct. The accessor is unique to the mount, while the path
+      can be reused after a disable.
+  correct_option: a
+  explanation: Correct. The accessor is unique to the mount, while the path can be
+    reused after a disable.
+- id: ats113-010-02-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the effect of a tune
+  source_readings:
+  - sections/section-010/module-02/course-02-tune-an-auth-method.md
+  prompt: You lower `max_lease_ttl` with `bao auth tune`. What does it change?
+  options:
+  - id: a
+    text: New logins and renewals, but not tokens that already exist.
+    explanation: Correct. A tune applies to new logins and renewals; existing tokens
+      keep their lease.
+  - id: b
+    text: Every existing token at once.
+    explanation: Not correct. A tune applies to new logins and renewals; existing
+      tokens keep their lease.
+  - id: c
+    text: Only tokens of the root policy.
+    explanation: Not correct. A tune applies to new logins and renewals; existing
+      tokens keep their lease.
+  - id: d
+    text: Nothing until the mount is disabled and enabled again.
+    explanation: Not correct. A tune applies to new logins and renewals; existing
+      tokens keep their lease.
+  correct_option: a
+  explanation: Correct. A tune applies to new logins and renewals; existing tokens
+    keep their lease.
+- id: ats113-010-02-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Compare mount and user limits
+  source_readings:
+  - sections/section-010/module-02/course-03-token-settings-on-logins.md
+  prompt: A user asks for `token_ttl=2h` on a mount whose `max_lease_ttl` is 1h. What
+    is the lease of the token?
+  options:
+  - id: a
+    text: 1 hour.
+    explanation: Correct. The mount limit wins, so the lease is the smaller value.
+  - id: b
+    text: 2 hours.
+    explanation: Not correct. The mount limit wins, so the lease is the smaller value.
+  - id: c
+    text: The default of 32 days.
+    explanation: Not correct. The mount limit wins, so the lease is the smaller value.
+  - id: d
+    text: The login is refused.
+    explanation: Not correct. The mount limit wins, so the lease is the smaller value.
+  correct_option: a
+  explanation: Correct. The mount limit wins, so the lease is the smaller value.
+- id: ats113-010-02-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use the current field names
+  source_readings:
+  - sections/section-010/module-02/course-03-token-settings-on-logins.md
+  prompt: Which field sets the policies of a userpass user in current OpenBao?
+  options:
+  - id: a
+    text: "`token_policies`."
+    explanation: Correct. Auth methods use the `token_*` fields. The plain `policies`
+      field is deprecated.
+  - id: b
+    text: "`policies_list`."
+    explanation: Not correct. Auth methods use the `token_*` fields. The plain `policies`
+      field is deprecated.
+  - id: c
+    text: "`acl`."
+    explanation: Not correct. Auth methods use the `token_*` fields. The plain `policies`
+      field is deprecated.
+  - id: d
+    text: "`rules`."
+    explanation: Not correct. Auth methods use the `token_*` fields. The plain `policies`
+      field is deprecated.
+  correct_option: a
+  explanation: Correct. Auth methods use the `token_*` fields. The plain `policies`
+    field is deprecated.
+- id: ats113-010-02-q09
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Check a real lease
+  source_readings:
+  - sections/section-010/module-02/course-03-token-settings-on-logins.md
+  prompt: Which value of a login response shows the lease the mount really gave?
+  options:
+  - id: a
+    text: "`lease_duration`."
+    explanation: Correct. `lease_duration` is the token TTL after the mount applied
+      its limits.
+  - id: b
+    text: "`entity_id`."
+    explanation: Not correct. `lease_duration` is the token TTL after the mount applied
+      its limits.
+  - id: c
+    text: "`accessor`."
+    explanation: Not correct. `lease_duration` is the token TTL after the mount applied
+      its limits.
+  - id: d
+    text: "`mfa_requirement`."
+    explanation: Not correct. `lease_duration` is the token TTL after the mount applied
+      its limits.
+  correct_option: a
+  explanation: Correct. `lease_duration` is the token TTL after the mount applied
+    its limits.
+- id: ats113-010-02-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Delegate administration
+  source_readings:
+  - sections/section-010/module-02/course-04-log-in-and-delegate.md
+  prompt: Which policy path lets someone enable and disable auth methods?
+  options:
+  - id: a
+    text: "`sys/auth/*`."
+    explanation: Correct. Mounts are managed at `sys/auth`, while `auth/<mount>/*`
+      controls the content of one mount.
+  - id: b
+    text: "`auth/token/create`."
+    explanation: Not correct. Mounts are managed at `sys/auth`, while `auth/<mount>/*`
+      controls the content of one mount.
+  - id: c
+    text: "`secret/data/auth/*`."
+    explanation: Not correct. Mounts are managed at `sys/auth`, while `auth/<mount>/*`
+      controls the content of one mount.
+  - id: d
+    text: "`sys/policies/acl/*`."
+    explanation: Not correct. Mounts are managed at `sys/auth`, while `auth/<mount>/*`
+      controls the content of one mount.
+  correct_option: a
+  explanation: Correct. Mounts are managed at `sys/auth`, while `auth/<mount>/*` controls
+    the content of one mount.

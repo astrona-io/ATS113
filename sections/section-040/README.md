@@ -9,6 +9,8 @@ alice logs in to OpenBao with a userpass account during an outage and through Ke
 - Internal groups, whose members you set in OpenBao, and external groups, whose members come from the identity provider.
 - Token policies and identity policies, and why identity policies change without a new login.
 - Policy templates with `{{identity.entity.name}}` and other identity values.
+- Entity operations: metadata, lookups, merging, disabling and deleting.
+- Identity tokens: a signing key, a role with a claims template, and how receivers verify and rotate.
 
 ## The learning path
 
@@ -20,6 +22,16 @@ The module starts at its landing page, which also launches the playground. The p
 2. Internal And External Groups, followed by the lab **Give Alice One Identity Across Two Logins**
 3. Identity In Policy Templates
 4. Summary
+
+### 2. Entity Operations And Identity Tokens
+
+The playground for this module holds OpenBao with the userpass user `alice` and an entity for her.
+
+1. Entity Operations
+2. Merge, Disable And Delete
+3. Issue Identity Tokens, followed by the lab **Issue Identity Tokens For Alice**
+4. Verify And Rotate
+5. Summary
 
 ## Section capstone: Make Groups From Keycloak Drive Access
 

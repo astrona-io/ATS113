@@ -282,3 +282,523 @@ questions:
     explanation: Not correct. The mount is a different placeholder.
   correct_option: b
   explanation: Correct. It is filled at request time.
+- id: ats113-final-q13
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name where auth methods are mounted
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: Where does an auth method enabled with `bao auth enable ldap` live?
+  options:
+  - id: a
+    text: At `auth/ldap/`.
+    explanation: Correct. Auth methods are mounted below `auth/`, and the path defaults
+      to the method name.
+  - id: b
+    text: At `sys/ldap/`.
+    explanation: Not correct. Auth methods are mounted below `auth/`, and the path
+      defaults to the method name.
+  - id: c
+    text: At `secret/ldap/`.
+    explanation: Not correct. Auth methods are mounted below `auth/`, and the path
+      defaults to the method name.
+  - id: d
+    text: At `identity/ldap/`.
+    explanation: Not correct. Auth methods are mounted below `auth/`, and the path
+      defaults to the method name.
+  correct_option: a
+  explanation: Correct. Auth methods are mounted below `auth/`, and the path defaults
+    to the method name.
+- id: ats113-final-q14
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Mount one method twice
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: What must you add to `bao auth enable` to mount a second userpass method?
+  options:
+  - id: a
+    text: "`-path=<new path>`."
+    explanation: Correct. The `-path` option mounts the same method at a second path,
+      and each mount has its own users and accessor.
+  - id: b
+    text: "`-force`."
+    explanation: Not correct. The `-path` option mounts the same method at a second
+      path, and each mount has its own users and accessor.
+  - id: c
+    text: "`-namespace=<name>`."
+    explanation: Not correct. The `-path` option mounts the same method at a second
+      path, and each mount has its own users and accessor.
+  - id: d
+    text: Nothing; a method can only be mounted once.
+    explanation: Not correct. The `-path` option mounts the same method at a second
+      path, and each mount has its own users and accessor.
+  correct_option: a
+  explanation: Correct. The `-path` option mounts the same method at a second path,
+    and each mount has its own users and accessor.
+- id: ats113-final-q15
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the cubbyhole
+  source_readings:
+  - sections/section-010/module-03/course-01-the-cubbyhole.md
+  prompt: Who can read a token's cubbyhole?
+  options:
+  - id: a
+    text: Only that token.
+    explanation: Correct. The cubbyhole is private to the token. Not even the root
+      token can read it.
+  - id: b
+    text: Any token with the `default` policy.
+    explanation: Not correct. The cubbyhole is private to the token. Not even the
+      root token can read it.
+  - id: c
+    text: Only the root token.
+    explanation: Not correct. The cubbyhole is private to the token. Not even the
+      root token can read it.
+  - id: d
+    text: Every token of the same entity.
+    explanation: Not correct. The cubbyhole is private to the token. Not even the
+      root token can read it.
+  correct_option: a
+  explanation: Correct. The cubbyhole is private to the token. Not even the root token
+    can read it.
+- id: ats113-final-q16
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe cubbyhole lifetime
+  source_readings:
+  - sections/section-010/module-03/course-01-the-cubbyhole.md
+  prompt: What happens to a cubbyhole when its token expires?
+  options:
+  - id: a
+    text: The cubbyhole is deleted with it.
+    explanation: Correct. The cubbyhole lives and dies with its token.
+  - id: b
+    text: The cubbyhole is copied to the parent token.
+    explanation: Not correct. The cubbyhole lives and dies with its token.
+  - id: c
+    text: The cubbyhole stays until it is deleted by hand.
+    explanation: Not correct. The cubbyhole lives and dies with its token.
+  - id: d
+    text: The cubbyhole becomes readable by the root token.
+    explanation: Not correct. The cubbyhole lives and dies with its token.
+  correct_option: a
+  explanation: Correct. The cubbyhole lives and dies with its token.
+- id: ats113-final-q17
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Treat the role ID
+  source_readings:
+  - sections/section-020/module-02/course-01-role-settings-and-role-id.md
+  prompt: How secret is an AppRole `role_id`?
+  options:
+  - id: a
+    text: It is not secret; the `secret_id` is the secret part.
+    explanation: Correct. The `role_id` identifies the role. The login needs the `secret_id`
+      as well when `bind_secret_id` is on.
+  - id: b
+    text: It is as secret as a root token.
+    explanation: Not correct. The `role_id` identifies the role. The login needs the
+      `secret_id` as well when `bind_secret_id` is on.
+  - id: c
+    text: It is secret only on Kubernetes.
+    explanation: Not correct. The `role_id` identifies the role. The login needs the
+      `secret_id` as well when `bind_secret_id` is on.
+  - id: d
+    text: It is a one-time password.
+    explanation: Not correct. The `role_id` identifies the role. The login needs the
+      `secret_id` as well when `bind_secret_id` is on.
+  correct_option: a
+  explanation: Correct. The `role_id` identifies the role. The login needs the `secret_id`
+    as well when `bind_secret_id` is on.
+- id: ats113-final-q18
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Keep bind_secret_id on
+  source_readings:
+  - sections/section-020/module-02/course-01-role-settings-and-role-id.md
+  prompt: What happens if you turn off `bind_secret_id`?
+  options:
+  - id: a
+    text: Anyone who knows the `role_id` can log in, unless another binding limits
+      it.
+    explanation: Correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  - id: b
+    text: Logins need two secret IDs.
+    explanation: Not correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  - id: c
+    text: The role cannot issue tokens.
+    explanation: Not correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  - id: d
+    text: The `role_id` changes at every login.
+    explanation: Not correct. Without the `secret_id`, the `role_id` alone is enough,
+      so the secret part is gone.
+  correct_option: a
+  explanation: Correct. Without the `secret_id`, the `role_id` alone is enough, so
+    the secret part is gone.
+- id: ats113-final-q19
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the search account
+  source_readings:
+  - sections/section-030/module-02/course-01-how-ldap-login-works.md
+  prompt: What is the `binddn` account used for?
+  options:
+  - id: a
+    text: To search the directory for the user and the groups.
+    explanation: Correct. OpenBao binds as the search account first so it can find
+      the DN of the user.
+  - id: b
+    text: To store the user's password.
+    explanation: Not correct. OpenBao binds as the search account first so it can
+      find the DN of the user.
+  - id: c
+    text: To sign tokens.
+    explanation: Not correct. OpenBao binds as the search account first so it can
+      find the DN of the user.
+  - id: d
+    text: To create users in the directory.
+    explanation: Not correct. OpenBao binds as the search account first so it can
+      find the DN of the user.
+  correct_option: a
+  explanation: Correct. OpenBao binds as the search account first so it can find the
+    DN of the user.
+- id: ats113-final-q20
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Order of an LDAP login
+  source_readings:
+  - sections/section-030/module-02/course-01-how-ldap-login-works.md
+  prompt: Which request checks the person's password?
+  options:
+  - id: a
+    text: A bind as the user's own DN with the password.
+    explanation: Correct. The password is proven by binding as the user's DN.
+  - id: b
+    text: A search of `ou=groups`.
+    explanation: Not correct. The password is proven by binding as the user's DN.
+  - id: c
+    text: A write to `auth/ldap/users`.
+    explanation: Not correct. The password is proven by binding as the user's DN.
+  - id: d
+    text: A lookup of the `binddn` password.
+    explanation: Not correct. The password is proven by binding as the user's DN.
+  correct_option: a
+  explanation: Correct. The password is proven by binding as the user's DN.
+- id: ats113-final-q21
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know metadata updates
+  source_readings:
+  - sections/section-040/module-02/course-01-entity-operations.md
+  prompt: You write an existing entity with only `metadata=site=aarhus`. What happens
+    to the other metadata keys?
+  options:
+  - id: a
+    text: They are removed, because metadata is replaced as a whole.
+    explanation: Correct. Metadata is replaced as a whole, so send every key you want
+      to keep.
+  - id: b
+    text: They are kept.
+    explanation: Not correct. Metadata is replaced as a whole, so send every key you
+      want to keep.
+  - id: c
+    text: They move to the alias.
+    explanation: Not correct. Metadata is replaced as a whole, so send every key you
+      want to keep.
+  - id: d
+    text: The write fails.
+    explanation: Not correct. Metadata is replaced as a whole, so send every key you
+      want to keep.
+  correct_option: a
+  explanation: Correct. Metadata is replaced as a whole, so send every key you want
+    to keep.
+- id: ats113-final-q22
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know unique names
+  source_readings:
+  - sections/section-040/module-02/course-01-entity-operations.md
+  prompt: What happens when you create an entity with a name that already exists?
+  options:
+  - id: a
+    text: The existing entity is updated.
+    explanation: Correct. Entity names are unique, so the write updates that entity.
+  - id: b
+    text: A second entity with the same name is created.
+    explanation: Not correct. Entity names are unique, so the write updates that entity.
+  - id: c
+    text: The write fails with a conflict.
+    explanation: Not correct. Entity names are unique, so the write updates that entity.
+  - id: d
+    text: The old entity is disabled.
+    explanation: Not correct. Entity names are unique, so the write updates that entity.
+  correct_option: a
+  explanation: Correct. Entity names are unique, so the write updates that entity.
+- id: ats113-final-q23
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify mounts by accessor
+  source_readings:
+  - sections/section-010/module-02/course-01-enable-list-and-disable.md
+  prompt: Why is the mount accessor the safest way to tell two mounts apart?
+  options:
+  - id: a
+    text: It is a unique ID that audit logs and the identity system use.
+    explanation: Correct. The accessor is unique to the mount, while the path can
+      be reused after a disable.
+  - id: b
+    text: It is the same for every mount of one method.
+    explanation: Not correct. The accessor is unique to the mount, while the path
+      can be reused after a disable.
+  - id: c
+    text: It is the secret key of the mount.
+    explanation: Not correct. The accessor is unique to the mount, while the path
+      can be reused after a disable.
+  - id: d
+    text: It changes at every login.
+    explanation: Not correct. The accessor is unique to the mount, while the path
+      can be reused after a disable.
+  correct_option: a
+  explanation: Correct. The accessor is unique to the mount, while the path can be
+    reused after a disable.
+- id: ats113-final-q24
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the effect of a tune
+  source_readings:
+  - sections/section-010/module-02/course-02-tune-an-auth-method.md
+  prompt: You lower `max_lease_ttl` with `bao auth tune`. What does it change?
+  options:
+  - id: a
+    text: New logins and renewals, but not tokens that already exist.
+    explanation: Correct. A tune applies to new logins and renewals; existing tokens
+      keep their lease.
+  - id: b
+    text: Every existing token at once.
+    explanation: Not correct. A tune applies to new logins and renewals; existing
+      tokens keep their lease.
+  - id: c
+    text: Only tokens of the root policy.
+    explanation: Not correct. A tune applies to new logins and renewals; existing
+      tokens keep their lease.
+  - id: d
+    text: Nothing until the mount is disabled and enabled again.
+    explanation: Not correct. A tune applies to new logins and renewals; existing
+      tokens keep their lease.
+  correct_option: a
+  explanation: Correct. A tune applies to new logins and renewals; existing tokens
+    keep their lease.
+- id: ats113-final-q25
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the signal of a failed unwrap
+  source_readings:
+  - sections/section-010/module-03/course-04-safe-delivery.md
+  prompt: A receiver gets an error unwrapping a token it has never used. What is the
+    safest conclusion?
+  options:
+  - id: a
+    text: The secret may be exposed and must be replaced.
+    explanation: Correct. An unwrap that fails when you did not unwrap before means
+      someone else did, or the TTL ended.
+  - id: b
+    text: The network is slow.
+    explanation: Not correct. An unwrap that fails when you did not unwrap before
+      means someone else did, or the TTL ended.
+  - id: c
+    text: The token needs a longer TTL.
+    explanation: Not correct. An unwrap that fails when you did not unwrap before
+      means someone else did, or the TTL ended.
+  - id: d
+    text: The receiver must retry until it works.
+    explanation: Not correct. An unwrap that fails when you did not unwrap before
+      means someone else did, or the TTL ended.
+  correct_option: a
+  explanation: Correct. An unwrap that fails when you did not unwrap before means
+    someone else did, or the TTL ended.
+- id: ats113-final-q26
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Look up without using up
+  source_readings:
+  - sections/section-010/module-03/course-03-lookup-rewrap-and-wrap-data.md
+  prompt: Which operation checks a wrapping token without using it up?
+  options:
+  - id: a
+    text: "`sys/wrapping/lookup`."
+    explanation: Correct. Lookup shows the creation path, creation time and TTL and
+      leaves the token valid.
+  - id: b
+    text: "`sys/wrapping/unwrap`."
+    explanation: Not correct. Lookup shows the creation path, creation time and TTL
+      and leaves the token valid.
+  - id: c
+    text: "`sys/wrapping/rewrap`."
+    explanation: Not correct. Lookup shows the creation path, creation time and TTL
+      and leaves the token valid.
+  - id: d
+    text: "`auth/token/revoke`."
+    explanation: Not correct. Lookup shows the creation path, creation time and TTL
+      and leaves the token valid.
+  correct_option: a
+  explanation: Correct. Lookup shows the creation path, creation time and TTL and
+    leaves the token valid.
+- id: ats113-final-q27
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know why pull is preferred
+  source_readings:
+  - sections/section-020/module-02/course-02-pull-and-push-secret-ids.md
+  prompt: Why is pull mode preferred over push mode?
+  options:
+  - id: a
+    text: A pushed value is only as strong as the system that made it.
+    explanation: Correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  - id: b
+    text: Pull mode uses no accessor.
+    explanation: Not correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  - id: c
+    text: Push mode cannot expire.
+    explanation: Not correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  - id: d
+    text: Pull mode skips the audit log.
+    explanation: Not correct. OpenBao generates a strong random value, while a pushed
+      value depends on its source.
+  correct_option: a
+  explanation: Correct. OpenBao generates a strong random value, while a pushed value
+    depends on its source.
+- id: ats113-final-q28
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Narrow one secret ID
+  source_readings:
+  - sections/section-020/module-02/course-02-pull-and-push-secret-ids.md
+  prompt: Which value can you set on a single `secret_id` request to narrow it?
+  options:
+  - id: a
+    text: "`ttl`, `num_uses`, `cidr_list` and `metadata`."
+    explanation: Correct. The creation request can narrow the secret ID itself, within
+      the role limits.
+  - id: b
+    text: "`policies` and `token_type`."
+    explanation: Not correct. The creation request can narrow the secret ID itself,
+      within the role limits.
+  - id: c
+    text: "`role_id` and `accessor`."
+    explanation: Not correct. The creation request can narrow the secret ID itself,
+      within the role limits.
+  - id: d
+    text: "`wrap_ttl` only."
+    explanation: Not correct. The creation request can narrow the secret ID itself,
+      within the role limits.
+  correct_option: a
+  explanation: Correct. The creation request can narrow the secret ID itself, within
+    the role limits.
+- id: ats113-final-q29
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the group mapping path
+  source_readings:
+  - sections/section-030/module-02/course-03-map-groups-and-users-to-policies.md
+  prompt: At which path do you map the group `engineers` to policies?
+  options:
+  - id: a
+    text: "`auth/ldap/groups/engineers`."
+    explanation: Correct. Group mappings live at `auth/ldap/groups/<name>`.
+  - id: b
+    text: "`auth/ldap/users/engineers`."
+    explanation: Not correct. Group mappings live at `auth/ldap/groups/<name>`.
+  - id: c
+    text: "`sys/policies/engineers`."
+    explanation: Not correct. Group mappings live at `auth/ldap/groups/<name>`.
+  - id: d
+    text: "`identity/group/name/engineers`."
+    explanation: Not correct. Group mappings live at `auth/ldap/groups/<name>`.
+  correct_option: a
+  explanation: Correct. Group mappings live at `auth/ldap/groups/<name>`.
+- id: ats113-final-q30
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Combine policies
+  source_readings:
+  - sections/section-030/module-02/course-03-map-groups-and-users-to-policies.md
+  prompt: A user is in two mapped groups and has a user mapping. Which policies does
+    the token get?
+  options:
+  - id: a
+    text: The union of default, both groups and the user mapping.
+    explanation: Correct. The token gets all mapped policies plus `default`.
+  - id: b
+    text: Only the first group.
+    explanation: Not correct. The token gets all mapped policies plus `default`.
+  - id: c
+    text: Only the user mapping.
+    explanation: Not correct. The token gets all mapped policies plus `default`.
+  - id: d
+    text: Only `default`.
+    explanation: Not correct. The token gets all mapped policies plus `default`.
+  correct_option: a
+  explanation: Correct. The token gets all mapped policies plus `default`.
+- id: ats113-final-q31
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Resolve a merge conflict
+  source_readings:
+  - sections/section-040/module-02/course-02-merge-disable-and-delete.md
+  prompt: Two entities have an alias on the same mount. How do you choose which alias
+    survives a merge?
+  options:
+  - id: a
+    text: Pass its ID in `conflicting_alias_ids_to_keep`.
+    explanation: Correct. An entity holds one alias per mount, so you name the one
+      to keep.
+  - id: b
+    text: Delete both aliases first.
+    explanation: Not correct. An entity holds one alias per mount, so you name the
+      one to keep.
+  - id: c
+    text: Rename the target entity.
+    explanation: Not correct. An entity holds one alias per mount, so you name the
+      one to keep.
+  - id: d
+    text: Disable the mount.
+    explanation: Not correct. An entity holds one alias per mount, so you name the
+      one to keep.
+  correct_option: a
+  explanation: Correct. An entity holds one alias per mount, so you name the one to
+    keep.
+- id: ats113-final-q32
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Disable versus delete
+  source_readings:
+  - sections/section-040/module-02/course-02-merge-disable-and-delete.md
+  prompt: What is the difference between disabling and deleting an entity?
+  options:
+  - id: a
+    text: Disabling keeps aliases and groups and can be undone.
+    explanation: Correct. A disable is reversible, while a delete removes the entity
+      and its aliases for good.
+  - id: b
+    text: Deleting can be undone with `disabled=false`.
+    explanation: Not correct. A disable is reversible, while a delete removes the
+      entity and its aliases for good.
+  - id: c
+    text: Disabling removes the aliases.
+    explanation: Not correct. A disable is reversible, while a delete removes the
+      entity and its aliases for good.
+  - id: d
+    text: There is no difference.
+    explanation: Not correct. A disable is reversible, while a delete removes the
+      entity and its aliases for good.
+  correct_option: a
+  explanation: Correct. A disable is reversible, while a delete removes the entity
+    and its aliases for good.

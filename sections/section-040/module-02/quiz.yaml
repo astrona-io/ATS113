@@ -1,0 +1,271 @@
+# Knowledge check for one module. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats113-040-02
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: module
+  id: section-040-module-02
+  title: Entity Operations And Identity Tokens
+placement:
+  position: after
+  reading: sections/section-040/module-02/course-05-summary.md
+questions:
+- id: ats113-040-02-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know metadata updates
+  source_readings:
+  - sections/section-040/module-02/course-01-entity-operations.md
+  prompt: You write an existing entity with only `metadata=site=aarhus`. What happens
+    to the other metadata keys?
+  options:
+  - id: a
+    text: They are removed, because metadata is replaced as a whole.
+    explanation: Correct. Metadata is replaced as a whole, so send every key you want
+      to keep.
+  - id: b
+    text: They are kept.
+    explanation: Not correct. Metadata is replaced as a whole, so send every key you
+      want to keep.
+  - id: c
+    text: They move to the alias.
+    explanation: Not correct. Metadata is replaced as a whole, so send every key you
+      want to keep.
+  - id: d
+    text: The write fails.
+    explanation: Not correct. Metadata is replaced as a whole, so send every key you
+      want to keep.
+  correct_option: a
+  explanation: Correct. Metadata is replaced as a whole, so send every key you want
+    to keep.
+- id: ats113-040-02-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know unique names
+  source_readings:
+  - sections/section-040/module-02/course-01-entity-operations.md
+  prompt: What happens when you create an entity with a name that already exists?
+  options:
+  - id: a
+    text: The existing entity is updated.
+    explanation: Correct. Entity names are unique, so the write updates that entity.
+  - id: b
+    text: A second entity with the same name is created.
+    explanation: Not correct. Entity names are unique, so the write updates that entity.
+  - id: c
+    text: The write fails with a conflict.
+    explanation: Not correct. Entity names are unique, so the write updates that entity.
+  - id: d
+    text: The old entity is disabled.
+    explanation: Not correct. Entity names are unique, so the write updates that entity.
+  correct_option: a
+  explanation: Correct. Entity names are unique, so the write updates that entity.
+- id: ats113-040-02-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Create an alias
+  source_readings:
+  - sections/section-040/module-02/course-01-entity-operations.md
+  prompt: Which three values does an alias need?
+  options:
+  - id: a
+    text: A name, the entity ID and the mount accessor.
+    explanation: Correct. An alias is created with `name`, `canonical_id` and `mount_accessor`.
+  - id: b
+    text: A name, a policy and a TTL.
+    explanation: Not correct. An alias is created with `name`, `canonical_id` and
+      `mount_accessor`.
+  - id: c
+    text: A path, a token and a key.
+    explanation: Not correct. An alias is created with `name`, `canonical_id` and
+      `mount_accessor`.
+  - id: d
+    text: A role, a group and a mount path.
+    explanation: Not correct. An alias is created with `name`, `canonical_id` and
+      `mount_accessor`.
+  correct_option: a
+  explanation: Correct. An alias is created with `name`, `canonical_id` and `mount_accessor`.
+- id: ats113-040-02-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find an entity from a login
+  source_readings:
+  - sections/section-040/module-02/course-01-entity-operations.md
+  prompt: Which call finds the entity that owns an alias?
+  options:
+  - id: a
+    text: "`identity/lookup/entity` with the alias name and mount accessor."
+    explanation: Correct. The lookup endpoint accepts an alias name and its mount
+      accessor.
+  - id: b
+    text: "`auth/token/lookup`."
+    explanation: Not correct. The lookup endpoint accepts an alias name and its mount
+      accessor.
+  - id: c
+    text: "`sys/mounts`."
+    explanation: Not correct. The lookup endpoint accepts an alias name and its mount
+      accessor.
+  - id: d
+    text: "`identity/group/id`."
+    explanation: Not correct. The lookup endpoint accepts an alias name and its mount
+      accessor.
+  correct_option: a
+  explanation: Correct. The lookup endpoint accepts an alias name and its mount accessor.
+- id: ats113-040-02-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Resolve a merge conflict
+  source_readings:
+  - sections/section-040/module-02/course-02-merge-disable-and-delete.md
+  prompt: Two entities have an alias on the same mount. How do you choose which alias
+    survives a merge?
+  options:
+  - id: a
+    text: Pass its ID in `conflicting_alias_ids_to_keep`.
+    explanation: Correct. An entity holds one alias per mount, so you name the one
+      to keep.
+  - id: b
+    text: Delete both aliases first.
+    explanation: Not correct. An entity holds one alias per mount, so you name the
+      one to keep.
+  - id: c
+    text: Rename the target entity.
+    explanation: Not correct. An entity holds one alias per mount, so you name the
+      one to keep.
+  - id: d
+    text: Disable the mount.
+    explanation: Not correct. An entity holds one alias per mount, so you name the
+      one to keep.
+  correct_option: a
+  explanation: Correct. An entity holds one alias per mount, so you name the one to
+    keep.
+- id: ats113-040-02-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Disable versus delete
+  source_readings:
+  - sections/section-040/module-02/course-02-merge-disable-and-delete.md
+  prompt: What is the difference between disabling and deleting an entity?
+  options:
+  - id: a
+    text: Disabling keeps aliases and groups and can be undone.
+    explanation: Correct. A disable is reversible, while a delete removes the entity
+      and its aliases for good.
+  - id: b
+    text: Deleting can be undone with `disabled=false`.
+    explanation: Not correct. A disable is reversible, while a delete removes the
+      entity and its aliases for good.
+  - id: c
+    text: Disabling removes the aliases.
+    explanation: Not correct. A disable is reversible, while a delete removes the
+      entity and its aliases for good.
+  - id: d
+    text: There is no difference.
+    explanation: Not correct. A disable is reversible, while a delete removes the
+      entity and its aliases for good.
+  correct_option: a
+  explanation: Correct. A disable is reversible, while a delete removes the entity
+    and its aliases for good.
+- id: ats113-040-02-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the token endpoint
+  source_readings:
+  - sections/section-040/module-02/course-03-issue-identity-tokens.md
+  prompt: Where does an entity read an identity token for the role `inventory-reader`?
+  options:
+  - id: a
+    text: "`identity/oidc/token/inventory-reader`."
+    explanation: Correct. Identity tokens are read at `identity/oidc/token/<role>`.
+  - id: b
+    text: "`identity/token/inventory-reader`."
+    explanation: Not correct. Identity tokens are read at `identity/oidc/token/<role>`.
+  - id: c
+    text: "`auth/token/create/inventory-reader`."
+    explanation: Not correct. Identity tokens are read at `identity/oidc/token/<role>`.
+  - id: d
+    text: "`sys/oidc/inventory-reader`."
+    explanation: Not correct. Identity tokens are read at `identity/oidc/token/<role>`.
+  correct_option: a
+  explanation: Correct. Identity tokens are read at `identity/oidc/token/<role>`.
+- id: ats113-040-02-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know why the root token fails
+  source_readings:
+  - sections/section-040/module-02/course-03-issue-identity-tokens.md
+  prompt: Why can the root token not read an identity token?
+  options:
+  - id: a
+    text: It has no entity behind it.
+    explanation: Correct. Claims are built from the entity of the calling token, and
+      the root token has none.
+  - id: b
+    text: It has no policies.
+    explanation: Not correct. Claims are built from the entity of the calling token,
+      and the root token has none.
+  - id: c
+    text: Its TTL is too long.
+    explanation: Not correct. Claims are built from the entity of the calling token,
+      and the root token has none.
+  - id: d
+    text: It cannot read paths with `oidc`.
+    explanation: Not correct. Claims are built from the entity of the calling token,
+      and the root token has none.
+  correct_option: a
+  explanation: Correct. Claims are built from the entity of the calling token, and
+    the root token has none.
+- id: ats113-040-02-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Pick template fields
+  source_readings:
+  - sections/section-040/module-02/course-03-issue-identity-tokens.md
+  prompt: Which claim names may a role template NOT set?
+  options:
+  - id: a
+    text: "`iss`, `sub`, `aud`, `exp`, `nbf` and `iat`."
+    explanation: Correct. These claims are reserved and set by OpenBao.
+  - id: b
+    text: "`team` and `name`."
+    explanation: Not correct. These claims are reserved and set by OpenBao.
+  - id: c
+    text: "`groups` and `site`."
+    explanation: Not correct. These claims are reserved and set by OpenBao.
+  - id: d
+    text: Any name with more than 3 letters.
+    explanation: Not correct. These claims are reserved and set by OpenBao.
+  correct_option: a
+  explanation: Correct. These claims are reserved and set by OpenBao.
+- id: ats113-040-02-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Choose the verification period
+  source_readings:
+  - sections/section-040/module-02/course-04-verify-and-rotate.md
+  prompt: How long should `verification_ttl` be?
+  options:
+  - id: a
+    text: At least as long as the longest role `ttl` plus the receiver's key cache
+      time.
+    explanation: Correct. Otherwise a token within its lifetime fails verification
+      after a rotation.
+  - id: b
+    text: Shorter than the rotation period of 1 minute.
+    explanation: Not correct. Otherwise a token within its lifetime fails verification
+      after a rotation.
+  - id: c
+    text: Zero, so old keys vanish.
+    explanation: Not correct. Otherwise a token within its lifetime fails verification
+      after a rotation.
+  - id: d
+    text: Equal to the entity metadata TTL.
+    explanation: Not correct. Otherwise a token within its lifetime fails verification
+      after a rotation.
+  correct_option: a
+  explanation: Correct. Otherwise a token within its lifetime fails verification after
+    a rotation.

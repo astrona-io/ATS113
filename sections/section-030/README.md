@@ -10,6 +10,7 @@ People should not share tokens, and they should not get a second password just f
 - JWT roles for automation, with `bound_audiences`, `user_claim`, `groups_claim` and `bound_claims`.
 - Reading the claims in an ID token to find why a login is refused.
 - What login multi-factor authentication (MFA) adds.
+- LDAP auth against a directory: the search account, user and group lookups, group and user mappings, and TLS.
 
 ## The learning path
 
@@ -21,6 +22,16 @@ The module starts at its landing page, which also launches the playground. The p
 2. OIDC Login With Keycloak
 3. JWT Roles, Bound Claims And Login MFA, followed by the lab **Map A Keycloak Group To An OpenBao Policy**
 4. Summary
+
+### 2. Log People In From A Directory With LDAP
+
+The playground for this module holds OpenBao and an OpenLDAP directory with three people and two groups.
+
+1. How LDAP Login Works
+2. Configure LDAP Auth Against OpenLDAP
+3. Map Groups And Users To Policies, followed by the lab **Log In From The Directory**
+4. Secure And Troubleshoot LDAP Login
+5. Summary
 
 ## Section capstone: Repair A Broken Keycloak Login
 

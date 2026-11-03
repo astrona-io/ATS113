@@ -1,0 +1,261 @@
+# Knowledge check for one module. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats113-030-02
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: module
+  id: section-030-module-02
+  title: Log People In From A Directory With LDAP
+placement:
+  position: after
+  reading: sections/section-030/module-02/course-05-summary.md
+questions:
+- id: ats113-030-02-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the search account
+  source_readings:
+  - sections/section-030/module-02/course-01-how-ldap-login-works.md
+  prompt: What is the `binddn` account used for?
+  options:
+  - id: a
+    text: To search the directory for the user and the groups.
+    explanation: Correct. OpenBao binds as the search account first so it can find
+      the DN of the user.
+  - id: b
+    text: To store the user's password.
+    explanation: Not correct. OpenBao binds as the search account first so it can
+      find the DN of the user.
+  - id: c
+    text: To sign tokens.
+    explanation: Not correct. OpenBao binds as the search account first so it can
+      find the DN of the user.
+  - id: d
+    text: To create users in the directory.
+    explanation: Not correct. OpenBao binds as the search account first so it can
+      find the DN of the user.
+  correct_option: a
+  explanation: Correct. OpenBao binds as the search account first so it can find the
+    DN of the user.
+- id: ats113-030-02-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Order of an LDAP login
+  source_readings:
+  - sections/section-030/module-02/course-01-how-ldap-login-works.md
+  prompt: Which request checks the person's password?
+  options:
+  - id: a
+    text: A bind as the user's own DN with the password.
+    explanation: Correct. The password is proven by binding as the user's DN.
+  - id: b
+    text: A search of `ou=groups`.
+    explanation: Not correct. The password is proven by binding as the user's DN.
+  - id: c
+    text: A write to `auth/ldap/users`.
+    explanation: Not correct. The password is proven by binding as the user's DN.
+  - id: d
+    text: A lookup of the `binddn` password.
+    explanation: Not correct. The password is proven by binding as the user's DN.
+  correct_option: a
+  explanation: Correct. The password is proven by binding as the user's DN.
+- id: ats113-030-02-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose userattr
+  source_readings:
+  - sections/section-030/module-02/course-02-configure-ldap-auth.md
+  prompt: Users log in with their `uid`. Which setting must match?
+  options:
+  - id: a
+    text: "`userattr=uid`."
+    explanation: Correct. `userattr` names the attribute that holds the login name.
+  - id: b
+    text: "`groupattr=uid`."
+    explanation: Not correct. `userattr` names the attribute that holds the login
+      name.
+  - id: c
+    text: "`binddn=uid`."
+    explanation: Not correct. `userattr` names the attribute that holds the login
+      name.
+  - id: d
+    text: "`url=uid`."
+    explanation: Not correct. `userattr` names the attribute that holds the login
+      name.
+  correct_option: a
+  explanation: Correct. `userattr` names the attribute that holds the login name.
+- id: ats113-030-02-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Configure the groups
+  source_readings:
+  - sections/section-030/module-02/course-02-configure-ldap-auth.md
+  prompt: What does `groupattr=cn` define?
+  options:
+  - id: a
+    text: The attribute that holds the group name used in group mappings.
+    explanation: Correct. Group mappings are named after the value of the `groupattr`
+      attribute.
+  - id: b
+    text: The login name of users.
+    explanation: Not correct. Group mappings are named after the value of the `groupattr`
+      attribute.
+  - id: c
+    text: The password attribute.
+    explanation: Not correct. Group mappings are named after the value of the `groupattr`
+      attribute.
+  - id: d
+    text: The DN of the search account.
+    explanation: Not correct. Group mappings are named after the value of the `groupattr`
+      attribute.
+  correct_option: a
+  explanation: Correct. Group mappings are named after the value of the `groupattr`
+    attribute.
+- id: ats113-030-02-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the group mapping path
+  source_readings:
+  - sections/section-030/module-02/course-03-map-groups-and-users-to-policies.md
+  prompt: At which path do you map the group `engineers` to policies?
+  options:
+  - id: a
+    text: "`auth/ldap/groups/engineers`."
+    explanation: Correct. Group mappings live at `auth/ldap/groups/<name>`.
+  - id: b
+    text: "`auth/ldap/users/engineers`."
+    explanation: Not correct. Group mappings live at `auth/ldap/groups/<name>`.
+  - id: c
+    text: "`sys/policies/engineers`."
+    explanation: Not correct. Group mappings live at `auth/ldap/groups/<name>`.
+  - id: d
+    text: "`identity/group/name/engineers`."
+    explanation: Not correct. Group mappings live at `auth/ldap/groups/<name>`.
+  correct_option: a
+  explanation: Correct. Group mappings live at `auth/ldap/groups/<name>`.
+- id: ats113-030-02-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Combine policies
+  source_readings:
+  - sections/section-030/module-02/course-03-map-groups-and-users-to-policies.md
+  prompt: A user is in two mapped groups and has a user mapping. Which policies does
+    the token get?
+  options:
+  - id: a
+    text: The union of default, both groups and the user mapping.
+    explanation: Correct. The token gets all mapped policies plus `default`.
+  - id: b
+    text: Only the first group.
+    explanation: Not correct. The token gets all mapped policies plus `default`.
+  - id: c
+    text: Only the user mapping.
+    explanation: Not correct. The token gets all mapped policies plus `default`.
+  - id: d
+    text: Only `default`.
+    explanation: Not correct. The token gets all mapped policies plus `default`.
+  correct_option: a
+  explanation: Correct. The token gets all mapped policies plus `default`.
+- id: ats113-030-02-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know the result without mapping
+  source_readings:
+  - sections/section-030/module-02/course-03-map-groups-and-users-to-policies.md
+  prompt: A person who is in no mapped group logs in successfully. Which policies
+    does the token have?
+  options:
+  - id: a
+    text: Only `default`.
+    explanation: Correct. The login works and the token carries only the `default`
+      policy.
+  - id: b
+    text: All policies.
+    explanation: Not correct. The login works and the token carries only the `default`
+      policy.
+  - id: c
+    text: None, not even `default`.
+    explanation: Not correct. The login works and the token carries only the `default`
+      policy.
+  - id: d
+    text: "`root`."
+    explanation: Not correct. The login works and the token carries only the `default`
+      policy.
+  correct_option: a
+  explanation: Correct. The login works and the token carries only the `default` policy.
+- id: ats113-030-02-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know when policies update
+  source_readings:
+  - sections/section-030/module-02/course-03-map-groups-and-users-to-policies.md
+  prompt: Alice is removed from a directory group. When does her token lose the group
+    policy?
+  options:
+  - id: a
+    text: At her next login.
+    explanation: Correct. Group membership is read at login, so live tokens keep their
+      policies.
+  - id: b
+    text: Immediately for the live token.
+    explanation: Not correct. Group membership is read at login, so live tokens keep
+      their policies.
+  - id: c
+    text: Never.
+    explanation: Not correct. Group membership is read at login, so live tokens keep
+      their policies.
+  - id: d
+    text: At the next OpenBao restart.
+    explanation: Not correct. Group membership is read at login, so live tokens keep
+      their policies.
+  correct_option: a
+  explanation: Correct. Group membership is read at login, so live tokens keep their
+    policies.
+- id: ats113-030-02-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use encrypted transport
+  source_readings:
+  - sections/section-030/module-02/course-04-secure-and-troubleshoot.md
+  prompt: Which setup keeps passwords from travelling in clear text?
+  options:
+  - id: a
+    text: LDAPS or StartTLS with the directory CA certificate.
+    explanation: Correct. Use TLS with a CA certificate and never skip verification.
+  - id: b
+    text: "`insecure_tls=true`."
+    explanation: Not correct. Use TLS with a CA certificate and never skip verification.
+  - id: c
+    text: "`url=ldap://` without TLS."
+    explanation: Not correct. Use TLS with a CA certificate and never skip verification.
+  - id: d
+    text: "`deny_null_bind=false`."
+    explanation: Not correct. Use TLS with a CA certificate and never skip verification.
+  correct_option: a
+  explanation: Correct. Use TLS with a CA certificate and never skip verification.
+- id: ats113-030-02-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Keep deny_null_bind on
+  source_readings:
+  - sections/section-030/module-02/course-04-secure-and-troubleshoot.md
+  prompt: Why keep `deny_null_bind` on?
+  options:
+  - id: a
+    text: A bind with an empty password can look like a success on some directories.
+    explanation: Correct. It prevents an empty-password login from being accepted.
+  - id: b
+    text: It encrypts the traffic.
+    explanation: Not correct. It prevents an empty-password login from being accepted.
+  - id: c
+    text: It caches group lookups.
+    explanation: Not correct. It prevents an empty-password login from being accepted.
+  - id: d
+    text: It disables the search account.
+    explanation: Not correct. It prevents an empty-password login from being accepted.
+  correct_option: a
+  explanation: Correct. It prevents an empty-password login from being accepted.
