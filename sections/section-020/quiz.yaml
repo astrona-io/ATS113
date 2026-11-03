@@ -1,0 +1,244 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats113-020
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: Authentication For Machines
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+- id: ats113-020-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the two AppRole values
+  source_readings:
+  - sections/section-020/module-01/course-01-approle.md
+  prompt: Which statement about `role_id` and `secret_id` is correct?
+  options:
+  - id: a
+    text: Both values are secret and never expire.
+    explanation: Not correct. The `role_id` is not secret.
+  - id: b
+    text: The `role_id` identifies the role and is not secret. The `secret_id` is
+      the secret half and can expire.
+    explanation: Correct. Only the `secret_id` carries the limits.
+  - id: c
+    text: The `secret_id` is fixed for the role and the `role_id` is generated at
+      each request.
+    explanation: Not correct. It is the other way round.
+  - id: d
+    text: The `role_id` alone is enough to log in.
+    explanation: Not correct. Both values must match.
+  correct_option: b
+  explanation: Correct. Only the `secret_id` carries the limits.
+- id: ats113-020-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Limit a secret_id to one login
+  source_readings:
+  - sections/section-020/module-01/course-01-approle.md
+  prompt: How do you create a `secret_id` that works for exactly one login?
+  options:
+  - id: a
+    text: Set `token_ttl=1` on the role.
+    explanation: Not correct. This limits the token time, not the logins.
+  - id: b
+    text: Set `bind_secret_id=false` on the role.
+    explanation: Not correct. This removes the need for a `secret_id`.
+  - id: c
+    text: Write to `auth/approle/role/ci/secret-id` with `num_uses=1`.
+    explanation: Correct. `num_uses` limits the logins of one `secret_id`.
+  - id: d
+    text: Read `auth/approle/role/ci/role-id` twice.
+    explanation: Not correct. Reading the `role_id` creates no `secret_id`.
+  correct_option: c
+  explanation: Correct. `num_uses` limits the logins of one `secret_id`.
+- id: ats113-020-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Diagnose an AppRole login that fails after a network change
+  source_readings:
+  - sections/section-020/module-01/course-01-approle.md
+  prompt: An AppRole login with a valid-looking `secret_id` is refused with an invalid
+    `secret_id` error. The job moved to a new network. What should you check first?
+  options:
+  - id: a
+    text: The ServiceAccount of the job.
+    explanation: Not correct. AppRole does not use a ServiceAccount.
+  - id: b
+    text: The `token_reviewer_jwt` of the role.
+    explanation: Not correct. That setting belongs to Kubernetes auth.
+  - id: c
+    text: The common name of the job.
+    explanation: Not correct. That is a certificate auth setting.
+  - id: d
+    text: The role's `secret_id_bound_cidrs` against the job's new address.
+    explanation: Correct. A CIDR limit gives the same error as a bad `secret_id`.
+  correct_option: d
+  explanation: Correct. A CIDR limit gives the same error as a bad `secret_id`.
+- id: ats113-020-q04
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain the risk of a bad AppRole setup
+  source_readings:
+  - sections/section-020/module-01/course-01-approle.md
+  prompt: Why is `bind_secret_id=false` a bad fix for a failing login?
+  options:
+  - id: a
+    text: Then the public `role_id` alone becomes a credential.
+    explanation: Correct. The `role_id` is not secret.
+  - id: b
+    text: It makes the `secret_id` expire at once.
+    explanation: Not correct. It removes the `secret_id` check.
+  - id: c
+    text: It disables the role's policies.
+    explanation: Not correct. Policies are not affected.
+  - id: d
+    text: It forces every login to use TLS.
+    explanation: Not correct. It has no effect on TLS.
+  correct_option: a
+  explanation: Correct. The `role_id` is not secret.
+- id: ats113-020-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the Kubernetes auth login
+  source_readings:
+  - sections/section-020/module-01/course-02-kubernetes-auth.md
+  prompt: What does OpenBao do with the ServiceAccount token a pod sends?
+  options:
+  - id: a
+    text: It asks the Kubernetes API server to review the token with the TokenReview
+      API.
+    explanation: Correct. The API server returns the ServiceAccount name and namespace.
+  - id: b
+    text: It checks the token against a copy stored in OpenBao.
+    explanation: Not correct. OpenBao keeps no copy of the token.
+  - id: c
+    text: It sends the token to Keycloak.
+    explanation: Not correct. Kubernetes auth does not use Keycloak.
+  - id: d
+    text: It uses the token directly as an OpenBao token.
+    explanation: Not correct. The token is exchanged for a new one.
+  correct_option: a
+  explanation: Correct. The API server returns the ServiceAccount name and namespace.
+- id: ats113-020-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the permission OpenBao needs
+  source_readings:
+  - sections/section-020/module-01/course-02-kubernetes-auth.md
+  prompt: Every Kubernetes login fails with a permission error from the API server.
+    Which binding should you check?
+  options:
+  - id: a
+    text: The role `cluster-admin` for the pod.
+    explanation: Not correct. The pod needs no such role.
+  - id: b
+    text: The ClusterRole `system:auth-delegator` for OpenBao's ServiceAccount.
+    explanation: Correct. It allows OpenBao to call TokenReview.
+  - id: c
+    text: The role `view` for the namespace.
+    explanation: Not correct. It does not allow TokenReview.
+  - id: d
+    text: The role `edit` for OpenBao's users.
+    explanation: Not correct. It does not allow TokenReview.
+  correct_option: b
+  explanation: Correct. It allows OpenBao to call TokenReview.
+- id: ats113-020-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Bind a role narrowly
+  source_readings:
+  - sections/section-020/module-01/course-02-kubernetes-auth.md
+  prompt: A Kubernetes auth role has `bound_service_account_names=*` and `bound_service_account_namespaces=inventory`.
+    Who can log in with it?
+  options:
+  - id: a
+    text: Only the ServiceAccount `inventory`.
+    explanation: Not correct. The name is not restricted.
+  - id: b
+    text: Only ServiceAccounts in other namespaces.
+    explanation: Not correct. The namespace is restricted to `inventory`.
+  - id: c
+    text: Any ServiceAccount in the namespace `inventory`.
+    explanation: Correct. The `*` accepts every name.
+  - id: d
+    text: Nobody, because `*` is not allowed.
+    explanation: Not correct. `*` is allowed, which is the risk.
+  correct_option: c
+  explanation: Correct. The `*` accepts every name.
+- id: ats113-020-q08
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe certificate auth
+  source_readings:
+  - sections/section-020/module-01/course-03-tls-certificate-auth.md
+  prompt: What does the `cert` auth method check at login?
+  options:
+  - id: a
+    text: A role_id and a secret_id.
+    explanation: Not correct. That is AppRole.
+  - id: b
+    text: A ServiceAccount token.
+    explanation: Not correct. That is Kubernetes auth.
+  - id: c
+    text: A password stored in OpenBao.
+    explanation: Not correct. That is userpass.
+  - id: d
+    text: The client certificate presented in the TLS handshake.
+    explanation: Correct. The certificate is the login.
+  correct_option: d
+  explanation: Correct. The certificate is the login.
+- id: ats113-020-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why certificate login needs a TLS listener
+  source_readings:
+  - sections/section-020/module-01/course-03-tls-certificate-auth.md
+  prompt: Why does a certificate login not work on a plain HTTP listener?
+  options:
+  - id: a
+    text: HTTP listeners do not support tokens.
+    explanation: Not correct. Tokens work over HTTP.
+  - id: b
+    text: No TLS handshake takes place, so OpenBao never sees a client certificate.
+    explanation: Correct. The certificate travels in the handshake.
+  - id: c
+    text: The certificate role is disabled on HTTP.
+    explanation: Not correct. The role is not tied to the listener.
+  - id: d
+    text: The server certificate expires on HTTP.
+    explanation: Not correct. HTTP uses no server certificate.
+  correct_option: b
+  explanation: Correct. The certificate travels in the handshake.
+- id: ats113-020-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Constrain a certificate role
+  source_readings:
+  - sections/section-020/module-01/course-03-tls-certificate-auth.md
+  prompt: A certificate role trusts the company CA but sets no `allowed_common_names`.
+    What is the effect?
+  options:
+  - id: a
+    text: No certificate can log in.
+    explanation: Not correct. The CA check still passes.
+  - id: b
+    text: Only certificates with client authentication in the subject name can log
+      in.
+    explanation: Not correct. No such name condition exists here.
+  - id: c
+    text: Any certificate the CA signed can log in with this role.
+    explanation: Correct. The CA is the only check.
+  - id: d
+    text: Only the first client to connect can log in.
+    explanation: Not correct. The role has no such limit.
+  correct_option: c
+  explanation: Correct. The CA is the only check.

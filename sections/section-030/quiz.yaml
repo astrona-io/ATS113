@@ -1,0 +1,242 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats113-030
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: Authentication For People
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+- id: ats113-030-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose the use for userpass
+  source_readings:
+  - sections/section-030/module-01/course-01-userpass.md
+  prompt: When is userpass the right auth method?
+  options:
+  - id: a
+    text: For a few local accounts, such as a break-glass account for emergencies.
+    explanation: Correct. It does not scale to a company.
+  - id: b
+    text: For all employees of a company.
+    explanation: Not correct. Accounts do not follow people between teams.
+  - id: c
+    text: For pods in Kubernetes.
+    explanation: Not correct. Pods use Kubernetes auth.
+  - id: d
+    text: For CI jobs outside the cluster.
+    explanation: Not correct. Jobs use AppRole.
+  correct_option: a
+  explanation: Correct. It does not scale to a company.
+- id: ats113-030-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict the effect of a password change
+  source_readings:
+  - sections/section-030/module-01/course-01-userpass.md
+  prompt: The password of a userpass account leaked and was changed. What happens
+    to tokens the user already has?
+  options:
+  - id: a
+    text: They are revoked at once.
+    explanation: Not correct. They are not revoked by the change.
+  - id: b
+    text: They stay valid until they expire or are revoked.
+    explanation: Correct. A password change does not revoke tokens.
+  - id: c
+    text: They lose their policies.
+    explanation: Not correct. Policies stay as they were.
+  - id: d
+    text: They are renewed.
+    explanation: Not correct. The change does not renew tokens.
+  correct_option: b
+  explanation: Correct. A password change does not revoke tokens.
+- id: ats113-030-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Avoid a typo in a user name
+  source_readings:
+  - sections/section-030/module-01/course-01-userpass.md
+  prompt: What happens when you run `bao write auth/userpass/users/breakglas ...`
+    and the user is `breakglass`?
+  options:
+  - id: a
+    text: OpenBao returns an error that the user is missing.
+    explanation: Not correct. A write creates missing users.
+  - id: b
+    text: OpenBao changes `breakglass` by closest name.
+    explanation: Not correct. Names must match exactly.
+  - id: c
+    text: OpenBao creates a second account named `breakglas`.
+    explanation: Correct. A write creates the user if it does not exist.
+  - id: d
+    text: OpenBao locks the account `breakglass`.
+    explanation: Not correct. The typo does not touch it.
+  correct_option: c
+  explanation: Correct. A write creates the user if it does not exist.
+- id: ats113-030-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define the discovery document
+  source_readings:
+  - sections/section-030/module-01/course-02-oidc-login-with-keycloak.md
+  prompt: What does the discovery document of an OIDC provider contain?
+  options:
+  - id: a
+    text: The passwords of all users.
+    explanation: Not correct. The document holds no passwords.
+  - id: b
+    text: The OpenBao policies.
+    explanation: Not correct. Policies are stored in OpenBao.
+  - id: c
+    text: The list of redirect URIs of every client.
+    explanation: Not correct. Redirect URIs are configured per client.
+  - id: d
+    text: The provider's endpoints and the keys that sign its tokens.
+    explanation: Correct. It lives at `/.well-known/openid-configuration`.
+  correct_option: d
+  explanation: Correct. It lives at `/.well-known/openid-configuration`.
+- id: ats113-030-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Set the discovery URL
+  source_readings:
+  - sections/section-030/module-01/course-02-oidc-login-with-keycloak.md
+  prompt: What is the correct `oidc_discovery_url` for the realm `inventory`?
+  options:
+  - id: a
+    text: "`http://keycloak.localtest.me:8080/realms/inventory/.well-known/openid-configuration`"
+    explanation: Not correct. OpenBao adds that part itself.
+  - id: b
+    text: "`http://keycloak.localtest.me:8080`"
+    explanation: Not correct. This is the server, not the realm issuer.
+  - id: c
+    text: "`http://keycloak.localtest.me:8080/realms/inventory`"
+    explanation: Correct. This is the issuer, without the well-known part.
+  - id: d
+    text: "`http://openbao.localtest.me:8200/oidc`"
+    explanation: Not correct. This is OpenBao, not the provider.
+  correct_option: c
+  explanation: Correct. This is the issuer, without the well-known part.
+- id: ats113-030-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain redirect URIs
+  source_readings:
+  - sections/section-030/module-01/course-02-oidc-login-with-keycloak.md
+  prompt: An OIDC browser login fails after Keycloak redirects back. Which settings
+    must list the redirect URI exactly?
+  options:
+  - id: a
+    text: Only the OpenBao role.
+    explanation: Not correct. The client must list it too.
+  - id: b
+    text: Only the Keycloak client.
+    explanation: Not correct. The role must list it too.
+  - id: c
+    text: The OpenBao policy of the user.
+    explanation: Not correct. Policies hold no redirect URIs.
+  - id: d
+    text: Both the OpenBao role and the Keycloak client.
+    explanation: Correct. One side missing refuses the login.
+  correct_option: d
+  explanation: Correct. One side missing refuses the login.
+- id: ats113-030-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain the difference between role types
+  source_readings:
+  - sections/section-030/module-01/course-03-jwt-roles-and-claims.md
+  prompt: Which statement about OIDC roles and JWT roles is correct?
+  options:
+  - id: a
+    text: An OIDC role runs a browser login. A JWT role checks an ID token the client
+      already has.
+    explanation: Correct. Both use the same configuration.
+  - id: b
+    text: A JWT role runs a browser login.
+    explanation: Not correct. That is the OIDC role.
+  - id: c
+    text: An OIDC role needs no discovery URL.
+    explanation: Not correct. Both read the same configuration.
+  - id: d
+    text: A JWT role checks passwords stored in OpenBao.
+    explanation: Not correct. Passwords are userpass.
+  correct_option: a
+  explanation: Correct. Both use the same configuration.
+- id: ats113-030-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Restrict a role to a group
+  source_readings:
+  - sections/section-030/module-01/course-03-jwt-roles-and-claims.md
+  prompt: Which setting gives the policy `ops` only to members of the Keycloak group
+    `ops`?
+  options:
+  - id: a
+    text: "`bound_audiences` set to `ops`."
+    explanation: Not correct. That checks the audience, not the group.
+  - id: b
+    text: "`bound_claims` with `groups` set to `ops`."
+    explanation: Correct. The role refuses tokens without that claim value.
+  - id: c
+    text: "`user_claim` set to `groups`."
+    explanation: Not correct. That names the user, not a restriction.
+  - id: d
+    text: "`token_ttl` set to `ops`."
+    explanation: Not correct. That sets a lifetime.
+  correct_option: b
+  explanation: Correct. The role refuses tokens without that claim value.
+- id: ats113-030-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Diagnose a refused login
+  source_readings:
+  - sections/section-030/module-01/course-03-jwt-roles-and-claims.md
+  prompt: A login is refused because the token's `aud` claim is `account` and the
+    role expects `openbao`. Which setting is involved?
+  options:
+  - id: a
+    text: "`groups_claim` on the role."
+    explanation: Not correct. That reads the groups, not the audience.
+  - id: b
+    text: "`allowed_redirect_uris` on the role."
+    explanation: Not correct. That is for browser logins.
+  - id: c
+    text: "`default_role` in the config."
+    explanation: Not correct. That picks a role, not an audience.
+  - id: d
+    text: "`bound_audiences` on the role."
+    explanation: Correct. It lists the audiences the role accepts.
+  correct_option: d
+  explanation: Correct. It lists the audiences the role accepts.
+- id: ats113-030-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Describe login MFA
+  source_readings:
+  - sections/section-030/module-01/course-03-jwt-roles-and-claims.md
+  prompt: Where do you define the second factor and the rule that requires it?
+  options:
+  - id: a
+    text: The method under `identity/mfa/method/` and the rule under `identity/mfa/login-enforcement/`.
+    explanation: Correct. The enforcement names mounts or groups.
+  - id: b
+    text: Both under `auth/token/roles/`.
+    explanation: Not correct. Token roles do not hold MFA.
+  - id: c
+    text: In the Keycloak client only.
+    explanation: Not correct. OpenBao has its own login MFA.
+  - id: d
+    text: In the policy of the user.
+    explanation: Not correct. Policies do not define MFA.
+  correct_option: a
+  explanation: Correct. The enforcement names mounts or groups.

@@ -121,6 +121,10 @@ modules:
             url: https://openbao.org/docs/concepts/tokens/
           - name: "Token auth method API"
             url: https://openbao.org/docs/api/auth/token/
+      - type: quiz
+        title: "Knowledge Check: Tokens And The Token Auth Method"
+        path: sections/section-010/quiz.yaml
+        pass_score: 70
 
   - id: module-020
     title: "Authentication For Machines"
@@ -193,6 +197,10 @@ modules:
             url: https://openbao.org/docs/api/auth/approle/
           - name: "TLS certificates auth method"
             url: https://openbao.org/docs/auth/cert/
+      - type: quiz
+        title: "Knowledge Check: Authentication For Machines"
+        path: sections/section-020/quiz.yaml
+        pass_score: 70
 
   - id: module-030
     title: "Authentication For People"
@@ -261,6 +269,10 @@ modules:
             url: https://openbao.org/docs/auth/jwt/
           - name: "Userpass auth method"
             url: https://openbao.org/docs/auth/userpass/
+      - type: quiz
+        title: "Knowledge Check: Authentication For People"
+        path: sections/section-030/quiz.yaml
+        pass_score: 70
 
   - id: module-040
     title: "Identity: Entities, Aliases And Groups"
@@ -333,3 +345,11 @@ modules:
             url: https://openbao.org/docs/api/secret/identity/group-alias/
           - name: "Policies: templated policies"
             url: https://openbao.org/docs/concepts/policies/
+      - type: quiz
+        title: "Knowledge Check: Identity: Entities, Aliases And Groups"
+        path: sections/section-040/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Final Domain Quiz"
+        path: sections/final-domain-quiz.yaml
+        pass_score: 70

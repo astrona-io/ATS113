@@ -1,0 +1,248 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats113-010
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: Tokens And The Token Auth Method
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+- id: ats113-010-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain the role of the accessor
+  source_readings:
+  - sections/section-010/module-01/course-01-what-a-token-carries.md
+  prompt: Why can an administrator safely log a token accessor but not the token?
+  options:
+  - id: a
+    text: The accessor can look up, renew or revoke the token but cannot be used to
+      make requests.
+    explanation: Correct. An accessor identifies the token without being a credential.
+  - id: b
+    text: The accessor is the token with its last characters removed.
+    explanation: Not correct. An accessor is a separate ID, not a shortened token.
+  - id: c
+    text: The accessor expires after one minute.
+    explanation: Not correct. An accessor has no separate short lifetime.
+  - id: d
+    text: The accessor only works with the root policy.
+    explanation: Not correct. Accessor use does not depend on the root policy.
+  correct_option: a
+  explanation: Correct. An accessor identifies the token without being a credential.
+- id: ats113-010-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the policy attached to every token by default
+  source_readings:
+  - sections/section-010/module-01/course-01-what-a-token-carries.md
+  prompt: A token is created with `-policy=inventory-read`. Which policies does `token_policies`
+    list?
+  options:
+  - id: a
+    text: Only `inventory-read`.
+    explanation: Not correct. The `default` policy is added automatically.
+  - id: b
+    text: "`default` and `inventory-read`."
+    explanation: Correct. OpenBao attaches `default` unless told not to.
+  - id: c
+    text: "`root` and `inventory-read`."
+    explanation: Not correct. The `root` policy is never added automatically.
+  - id: d
+    text: "`inventory-read` and `accessor`."
+    explanation: Not correct. There is no policy called `accessor`.
+  correct_option: b
+  explanation: Correct. OpenBao attaches `default` unless told not to.
+- id: ats113-010-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Write a policy path for KV version 2
+  source_readings:
+  - sections/section-010/module-01/course-01-what-a-token-carries.md
+  prompt: A token has a policy on `secret/inventory/*` but `bao kv get secret/inventory/db`
+    is refused. What is the most likely cause?
+  options:
+  - id: a
+    text: The default policy denies all reads.
+    explanation: Not correct. The default policy does not block KV reads on a path
+      another policy allows.
+  - id: b
+    text: The token has no accessor.
+    explanation: Not correct. Every service token has an accessor.
+  - id: c
+    text: KV version 2 stores data under `secret/data/...`, so the policy matches
+      no path that is read.
+    explanation: Correct. The policy path needs the `data/` segment.
+  - id: d
+    text: KV reads need the `sudo` capability.
+    explanation: Not correct. Reading a secret needs `read`, not `sudo`.
+  correct_option: c
+  explanation: Correct. The policy path needs the `data/` segment.
+- id: ats113-010-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain what a periodic token does on renewal
+  source_readings:
+  - sections/section-010/module-01/course-02-ttl-renewal-and-periodic-tokens.md
+  prompt: What happens when a service renews a periodic token with a period of 24
+    hours?
+  options:
+  - id: a
+    text: The TTL grows only until the system max TTL of 32 days.
+    explanation: Not correct. Periodic tokens have no max TTL.
+  - id: b
+    text: The token is replaced by a new token string.
+    explanation: Not correct. Renewal keeps the same token.
+  - id: c
+    text: The period doubles at every renewal.
+    explanation: Not correct. The period stays fixed.
+  - id: d
+    text: The TTL is reset to 24 hours, with no max TTL.
+    explanation: Correct. A periodic token has no ceiling as long as it is renewed.
+  correct_option: d
+  explanation: Correct. A periodic token has no ceiling as long as it is renewed.
+- id: ats113-010-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict renewal against an explicit max TTL
+  source_readings:
+  - sections/section-010/module-01/course-02-ttl-renewal-and-periodic-tokens.md
+  prompt: A token has TTL 10m and explicit max TTL 30m. After 25 minutes it is renewed
+    with `-increment=1h`. What does OpenBao grant?
+  options:
+  - id: a
+    text: One full hour.
+    explanation: Not correct. Renewal cannot go past the explicit max TTL.
+  - id: b
+    text: Nothing, and the token is revoked at once.
+    explanation: Not correct. The renewal is shortened, not refused.
+  - id: c
+    text: Only the time left until the explicit max TTL.
+    explanation: Correct. The explicit max TTL wins over the requested increment.
+  - id: d
+    text: The system default of 32 days.
+    explanation: Not correct. The explicit max TTL overrides the system default.
+  correct_option: c
+  explanation: Correct. The explicit max TTL wins over the requested increment.
+- id: ats113-010-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose the right token for a long-running service
+  source_readings:
+  - sections/section-010/module-01/course-02-ttl-renewal-and-periodic-tokens.md
+  prompt: Which command creates the token a long-running service needs, one that survives
+    revocation of its creator?
+  options:
+  - id: a
+    text: "`bao token create -ttl=24h -policy=inventory-read`"
+    explanation: Not correct. This is a child token and would die with its parent.
+  - id: b
+    text: "`bao token create -type=batch -policy=inventory-read`"
+    explanation: Not correct. A batch token cannot be renewed.
+  - id: c
+    text: "`bao token create -explicit-max-ttl=24h -orphan`"
+    explanation: Not correct. An explicit max TTL ends the token at that limit.
+  - id: d
+    text: "`bao token create -orphan -period=24h -policy=inventory-read`"
+    explanation: Correct. An orphan has no parent, and a period keeps it renewable.
+  correct_option: d
+  explanation: Correct. An orphan has no parent, and a period keeps it renewable.
+- id: ats113-010-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Compare service and batch tokens
+  source_readings:
+  - sections/section-010/module-01/course-03-token-types-orphans-and-roles.md
+  prompt: Which statement about batch tokens is correct?
+  options:
+  - id: a
+    text: They are not stored, cannot be renewed and have no accessor.
+    explanation: Correct. A batch token carries its own data and expiry.
+  - id: b
+    text: They can be renewed once.
+    explanation: Not correct. Batch tokens cannot be renewed.
+  - id: c
+    text: They have an accessor for revocation.
+    explanation: Not correct. Batch tokens have no accessor.
+  - id: d
+    text: They can create child tokens.
+    explanation: Not correct. Batch tokens cannot create children.
+  correct_option: a
+  explanation: Correct. A batch token carries its own data and expiry.
+- id: ats113-010-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict revocation in the token tree
+  source_readings:
+  - sections/section-010/module-01/course-03-token-types-orphans-and-roles.md
+  prompt: An administrator's login token created a deploy token, which created a job
+    token. The login token is revoked. What happens to the other two?
+  options:
+  - id: a
+    text: Only the deploy token is revoked.
+    explanation: Not correct. Revocation reaches all descendants.
+  - id: b
+    text: Both are revoked, because OpenBao revokes every token below a revoked token.
+    explanation: Correct. Revocation follows the tree downwards.
+  - id: c
+    text: Neither is revoked.
+    explanation: Not correct. Child tokens die with their parent.
+  - id: d
+    text: Both stay valid until their TTL ends.
+    explanation: Not correct. OpenBao revokes children at once.
+  correct_option: b
+  explanation: Correct. Revocation follows the tree downwards.
+- id: ats113-010-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Limit the policies a token role allows
+  source_readings:
+  - sections/section-010/module-01/course-03-token-types-orphans-and-roles.md
+  prompt: A token role has `allowed_policies=reporting`. What happens on `bao token
+    create -role=reporting -policy=inventory-read`?
+  options:
+  - id: a
+    text: OpenBao creates the token and adds `reporting` as well.
+    explanation: Not correct. The request is refused, not extended.
+  - id: b
+    text: OpenBao creates the token with only `default`.
+    explanation: Not correct. The request fails instead.
+  - id: c
+    text: OpenBao creates the token because the caller is an administrator.
+    explanation: Not correct. The role limit applies to the policies asked for.
+  - id: d
+    text: OpenBao refuses, because `inventory-read` is not in `allowed_policies`.
+    explanation: Correct. The list is the limit of the role.
+  correct_option: d
+  explanation: Correct. The list is the limit of the role.
+- id: ats113-010-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain when role settings apply
+  source_readings:
+  - sections/section-010/module-01/course-03-token-types-orphans-and-roles.md
+  prompt: An administrator changes `token_period` on a token role. Which tokens does
+    the change affect?
+  options:
+  - id: a
+    text: Existing tokens, because OpenBao reads the period from the role at every
+      renewal.
+    explanation: Correct. The period is the exception among role settings.
+  - id: b
+    text: Only tokens created after the change.
+    explanation: Not correct. The period is read again at every renewal.
+  - id: c
+    text: No token, until the role is deleted.
+    explanation: Not correct. The change applies without deleting the role.
+  - id: d
+    text: Only tokens created with `-orphan`.
+    explanation: Not correct. The orphan flag does not decide this.
+  correct_option: a
+  explanation: Correct. The period is the exception among role settings.

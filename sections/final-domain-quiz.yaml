@@ -1,0 +1,284 @@
+# Final domain knowledge check across all four sections.
+schema_version: 1
+kind: question_bank
+id: ats113-final
+course_id: ATS113
+exam_code: OPENBAO
+status: draft
+provenance: Original practice material; not official exam questions.
+scope:
+  type: domain
+  id: authentication-methods-identity
+  title: Authentication Methods And Identity Management
+questions:
+- id: ats113-final-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the policy attached to every token by default
+  source_readings:
+  - sections/section-010/module-01/course-01-what-a-token-carries.md
+  prompt: A token is created with `-policy=inventory-read`. Which policies does `token_policies`
+    list?
+  options:
+  - id: a
+    text: Only `inventory-read`.
+    explanation: Not correct. The `default` policy is added automatically.
+  - id: b
+    text: "`default` and `inventory-read`."
+    explanation: Correct. OpenBao attaches `default` unless told not to.
+  - id: c
+    text: "`root` and `inventory-read`."
+    explanation: Not correct. The `root` policy is never added automatically.
+  - id: d
+    text: "`inventory-read` and `accessor`."
+    explanation: Not correct. There is no policy called `accessor`.
+  correct_option: b
+  explanation: Correct. OpenBao attaches `default` unless told not to.
+- id: ats113-final-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict renewal against an explicit max TTL
+  source_readings:
+  - sections/section-010/module-01/course-02-ttl-renewal-and-periodic-tokens.md
+  prompt: A token has TTL 10m and explicit max TTL 30m. After 25 minutes it is renewed
+    with `-increment=1h`. What does OpenBao grant?
+  options:
+  - id: a
+    text: One full hour.
+    explanation: Not correct. Renewal cannot go past the explicit max TTL.
+  - id: b
+    text: Nothing, and the token is revoked at once.
+    explanation: Not correct. The renewal is shortened, not refused.
+  - id: c
+    text: Only the time left until the explicit max TTL.
+    explanation: Correct. The explicit max TTL wins over the requested increment.
+  - id: d
+    text: The system default of 32 days.
+    explanation: Not correct. The explicit max TTL overrides the system default.
+  correct_option: c
+  explanation: Correct. The explicit max TTL wins over the requested increment.
+- id: ats113-final-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Limit the policies a token role allows
+  source_readings:
+  - sections/section-010/module-01/course-03-token-types-orphans-and-roles.md
+  prompt: A token role has `allowed_policies=reporting`. What happens on `bao token
+    create -role=reporting -policy=inventory-read`?
+  options:
+  - id: a
+    text: OpenBao creates the token and adds `reporting` as well.
+    explanation: Not correct. The request is refused, not extended.
+  - id: b
+    text: OpenBao creates the token with only `default`.
+    explanation: Not correct. The request fails instead.
+  - id: c
+    text: OpenBao creates the token because the caller is an administrator.
+    explanation: Not correct. The role limit applies to the policies asked for.
+  - id: d
+    text: OpenBao refuses, because `inventory-read` is not in `allowed_policies`.
+    explanation: Correct. The list is the limit of the role.
+  correct_option: d
+  explanation: Correct. The list is the limit of the role.
+- id: ats113-final-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Limit a secret_id to one login
+  source_readings:
+  - sections/section-020/module-01/course-01-approle.md
+  prompt: How do you create a `secret_id` that works for exactly one login?
+  options:
+  - id: a
+    text: Set `token_ttl=1` on the role.
+    explanation: Not correct. This limits the token time, not the logins.
+  - id: b
+    text: Set `bind_secret_id=false` on the role.
+    explanation: Not correct. This removes the need for a `secret_id`.
+  - id: c
+    text: Write to `auth/approle/role/ci/secret-id` with `num_uses=1`.
+    explanation: Correct. `num_uses` limits the logins of one `secret_id`.
+  - id: d
+    text: Read `auth/approle/role/ci/role-id` twice.
+    explanation: Not correct. Reading the `role_id` creates no `secret_id`.
+  correct_option: c
+  explanation: Correct. `num_uses` limits the logins of one `secret_id`.
+- id: ats113-final-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe the Kubernetes auth login
+  source_readings:
+  - sections/section-020/module-01/course-02-kubernetes-auth.md
+  prompt: What does OpenBao do with the ServiceAccount token a pod sends?
+  options:
+  - id: a
+    text: It asks the Kubernetes API server to review the token with the TokenReview
+      API.
+    explanation: Correct. The API server returns the ServiceAccount name and namespace.
+  - id: b
+    text: It checks the token against a copy stored in OpenBao.
+    explanation: Not correct. OpenBao keeps no copy of the token.
+  - id: c
+    text: It sends the token to Keycloak.
+    explanation: Not correct. Kubernetes auth does not use Keycloak.
+  - id: d
+    text: It uses the token directly as an OpenBao token.
+    explanation: Not correct. The token is exchanged for a new one.
+  correct_option: a
+  explanation: Correct. The API server returns the ServiceAccount name and namespace.
+- id: ats113-final-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why certificate login needs a TLS listener
+  source_readings:
+  - sections/section-020/module-01/course-03-tls-certificate-auth.md
+  prompt: Why does a certificate login not work on a plain HTTP listener?
+  options:
+  - id: a
+    text: HTTP listeners do not support tokens.
+    explanation: Not correct. Tokens work over HTTP.
+  - id: b
+    text: No TLS handshake takes place, so OpenBao never sees a client certificate.
+    explanation: Correct. The certificate travels in the handshake.
+  - id: c
+    text: The certificate role is disabled on HTTP.
+    explanation: Not correct. The role is not tied to the listener.
+  - id: d
+    text: The server certificate expires on HTTP.
+    explanation: Not correct. HTTP uses no server certificate.
+  correct_option: b
+  explanation: Correct. The certificate travels in the handshake.
+- id: ats113-final-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Predict the effect of a password change
+  source_readings:
+  - sections/section-030/module-01/course-01-userpass.md
+  prompt: The password of a userpass account leaked and was changed. What happens
+    to tokens the user already has?
+  options:
+  - id: a
+    text: They are revoked at once.
+    explanation: Not correct. They are not revoked by the change.
+  - id: b
+    text: They stay valid until they expire or are revoked.
+    explanation: Correct. A password change does not revoke tokens.
+  - id: c
+    text: They lose their policies.
+    explanation: Not correct. Policies stay as they were.
+  - id: d
+    text: They are renewed.
+    explanation: Not correct. The change does not renew tokens.
+  correct_option: b
+  explanation: Correct. A password change does not revoke tokens.
+- id: ats113-final-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Set the discovery URL
+  source_readings:
+  - sections/section-030/module-01/course-02-oidc-login-with-keycloak.md
+  prompt: What is the correct `oidc_discovery_url` for the realm `inventory`?
+  options:
+  - id: a
+    text: "`http://keycloak.localtest.me:8080/realms/inventory/.well-known/openid-configuration`"
+    explanation: Not correct. OpenBao adds that part itself.
+  - id: b
+    text: "`http://keycloak.localtest.me:8080`"
+    explanation: Not correct. This is the server, not the realm issuer.
+  - id: c
+    text: "`http://keycloak.localtest.me:8080/realms/inventory`"
+    explanation: Correct. This is the issuer, without the well-known part.
+  - id: d
+    text: "`http://openbao.localtest.me:8200/oidc`"
+    explanation: Not correct. This is OpenBao, not the provider.
+  correct_option: c
+  explanation: Correct. This is the issuer, without the well-known part.
+- id: ats113-final-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Diagnose a refused login
+  source_readings:
+  - sections/section-030/module-01/course-03-jwt-roles-and-claims.md
+  prompt: A login is refused because the token's `aud` claim is `account` and the
+    role expects `openbao`. Which setting is involved?
+  options:
+  - id: a
+    text: "`groups_claim` on the role."
+    explanation: Not correct. That reads the groups, not the audience.
+  - id: b
+    text: "`allowed_redirect_uris` on the role."
+    explanation: Not correct. That is for browser logins.
+  - id: c
+    text: "`default_role` in the config."
+    explanation: Not correct. That picks a role, not an audience.
+  - id: d
+    text: "`bound_audiences` on the role."
+    explanation: Correct. It lists the audiences the role accepts.
+  correct_option: d
+  explanation: Correct. It lists the audiences the role accepts.
+- id: ats113-final-q10
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Predict entity creation
+  source_readings:
+  - sections/section-040/module-01/course-01-entities-and-aliases.md
+  prompt: A person logs in with userpass and, separately, with OIDC. No entity exists.
+    How many entities does OpenBao create?
+  options:
+  - id: a
+    text: One, joined by the user name.
+    explanation: Not correct. Nothing joins them by name.
+  - id: b
+    text: None, until a group exists.
+    explanation: Not correct. A login creates an entity.
+  - id: c
+    text: Two, one for each login.
+    explanation: Correct. Each first login creates its own entity and alias.
+  - id: d
+    text: Three, one per policy.
+    explanation: Not correct. Entities are not created per policy.
+  correct_option: c
+  explanation: Correct. Each first login creates its own entity and alias.
+- id: ats113-final-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Compare policy sources
+  source_readings:
+  - sections/section-040/module-01/course-02-internal-and-external-groups.md
+  prompt: Which policies appear in the token lookup field `identity_policies`?
+  options:
+  - id: a
+    text: Policies from the entity and its groups.
+    explanation: Correct. OpenBao checks them on every request.
+  - id: b
+    text: Policies from the auth method role.
+    explanation: Not correct. Those are token policies.
+  - id: c
+    text: Only the `default` policy.
+    explanation: Not correct. `default` is a token policy.
+  - id: d
+    text: Policies of the parent token.
+    explanation: Not correct. Parents do not pass policies.
+  correct_option: a
+  explanation: Correct. OpenBao checks them on every request.
+- id: ats113-final-q12
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Read a policy template
+  source_readings:
+  - sections/section-040/module-01/course-03-identity-in-policies.md
+  prompt: What does `{{identity.entity.name}}` in a policy path do?
+  options:
+  - id: a
+    text: It matches any entity name as a wildcard.
+    explanation: Not correct. It is a value, not a wildcard.
+  - id: b
+    text: OpenBao fills it with the name of the requesting token's entity.
+    explanation: Correct. It is filled at request time.
+  - id: c
+    text: It is replaced when the policy is written.
+    explanation: Not correct. It is filled per request.
+  - id: d
+    text: It names the auth mount.
+    explanation: Not correct. The mount is a different placeholder.
+  correct_option: b
+  explanation: Correct. It is filled at request time.
