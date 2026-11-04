@@ -13,7 +13,7 @@
 training:
   id: ATS113
   title: "OpenBao: Authentication Methods & Identity Management"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Authentication Methods & Identity
     Management domain of the OpenBao training path: tokens, their TTLs,
